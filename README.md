@@ -2,6 +2,30 @@
 
 
 
+A scope is the 
+
+
+When a user posts some content to their outbox, they must select the
+audience to which it is visible. In the commonspub world, our
+favourite way so far is circles.
+
+A user will begin with some circles, e.g.:
+
+* Guests
+* ActivityPub users (stranger)
+* Local users (stranger)
+* ActivityPub friends
+* Local friends
+* Blocked
+
+For data retrieval, there are the read-related permissions:
+
+* Find
+* Read
+* Search
+
+
+
 ## Copyright and License
 
 Copyright (c) 2020 James Laver, cpub_circles Contributors

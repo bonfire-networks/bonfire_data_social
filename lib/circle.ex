@@ -1,7 +1,5 @@
 defmodule CommonsPub.Circles.Circle do
   @moduledoc """
-  An circle is an identity for authentication purposes. An circle
-  has one or more credentials with which it may identify.
   """
 
   use Pointers.Pointable,
@@ -10,14 +8,14 @@ defmodule CommonsPub.Circles.Circle do
     source: "cpub_circles_circle"
 
   alias CommonsPub.Circles.Circle
-  alias Pointers.Changesets
+  alias Pointers.{Changesets, Pointer}
 
   pointable_schema do
   end
 
   def changeset(circle \\ %Circle{}, attrs, opts \\ []),
     do: Changesets.auto(circle, attrs, opts, [])
-
+ 
 end
 defmodule CommonsPub.Circles.Circle.Migration do
 
@@ -25,14 +23,26 @@ defmodule CommonsPub.Circles.Circle.Migration do
   import Pointers.Migration
   alias CommonsPub.Circles.Circle
 
-  def migrate_circle(dir \\ direction())
-  def migrate_circle(:up) do
-    create_pointable_table(Circle) do
+  defmacro __using__() do
+    quote do
+      require CommonsPub.Circles.Circle.Migration
+      require Pointers.Migration
     end
   end
 
-  def migrate_circle(:down) do
-    drop_pointable_table(Circle)
+  defmacro create_circle_table(), do: make_circle_table([])
+  defmacro create_circle_table([do: body]), do: make_circle_table(body)
+
+  defp make_circle_table(exprs) do
+    quote do
+      Pointers.Migrations.create_mixin_table(CommonsPub.Circles.Circle) do
+        unquote_splicing(exprs)
+      end
+    end
   end
+
+  def migrate_circle(dir \\ direction())
+  def migrate_circle(:up), do: create_circle_table()
+  def migrate_circle(:down), do: drop_pointable_table(Circle)
 
 end
