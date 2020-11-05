@@ -8,7 +8,7 @@ defmodule CommonsPub.Circles.Circle do
     source: "cpub_circles_circle"
 
   alias CommonsPub.Circles.Circle
-  alias Pointers.{Changesets, Pointer}
+  alias Pointers.Changesets
 
   pointable_schema do
   end
@@ -23,26 +23,39 @@ defmodule CommonsPub.Circles.Circle.Migration do
   import Pointers.Migration
   alias CommonsPub.Circles.Circle
 
-  defmacro __using__() do
+  # create_circle_table/{0,1}
+
+  defp make_circle_table(exprs) do
     quote do
-      require CommonsPub.Circles.Circle.Migration
       require Pointers.Migration
+      Pointers.Migration.create_pointable_table(CommonsPub.Circles.Circle) do
+        unquote_splicing(exprs)
+      end
     end
   end
 
   defmacro create_circle_table(), do: make_circle_table([])
   defmacro create_circle_table([do: body]), do: make_circle_table(body)
 
-  defp make_circle_table(exprs) do
-    quote do
-      Pointers.Migrations.create_mixin_table(CommonsPub.Circles.Circle) do
-        unquote_splicing(exprs)
-      end
-    end
+  # drop_circle_table/0
+
+  def drop_circle_table(), do: drop_pointable_table(Circle)
+
+  # migrate_circle/{0,1}
+
+  defp mc(:up), do: make_circle_table([])
+
+  defp mc(:down) do
+    quote do: CommonsPub.Circles.Circle.Migration.drop_circle_table()
   end
 
-  def migrate_circle(dir \\ direction())
-  def migrate_circle(:up), do: create_circle_table()
-  def migrate_circle(:down), do: drop_pointable_table(Circle)
+  defmacro migrate_circle() do
+    quote do
+      if Ecto.Migration.direction() == :up,
+        do: unquote(mc(:up)),
+        else: unquote(mc(:down))
+    end
+  end
+  defmacro migrate_circle(dir), do: mc(dir)
 
 end

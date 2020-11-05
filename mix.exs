@@ -1,3 +1,4 @@
+Code.eval_file("mess.exs")
 defmodule CommonsPub.Circles.MixProject do
   use Mix.Project
 
@@ -32,11 +33,6 @@ defmodule CommonsPub.Circles.MixProject do
   end
 
   defp deps do
-    [
-      {:pointers, "~> 0.5.1"},
-      # {:pointers, git: "https://github.com/commonspub/pointers", branch: "main"},
-      # {:pointers, path: "../pointers", override: true},
-      {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
-    ]
+    Mess.deps [{:ex_doc, ">= 0.0.0", only: :dev, runtime: false}]
   end
 end
