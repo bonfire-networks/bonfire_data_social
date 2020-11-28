@@ -9,6 +9,7 @@ defmodule Bonfire.Data.Content do
   mixin_schema do
     field :name, :string
     field :summary, :string
+    field :content, :string
   end
 
   def changeset(content \\ %Content{}, attrs, opts \\ []),
@@ -26,6 +27,7 @@ defmodule Bonfire.Data.Content.Migration do
     create_mixin_table(Content) do
       add :name, :text
       add :summary, :text
+      add :content, :text
     end
   end
 
