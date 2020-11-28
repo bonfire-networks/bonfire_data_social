@@ -1,4 +1,4 @@
-defmodule CommonsPub.Circles.Encircle do
+defmodule Bonfire.Data.Social.Encircle do
   @moduledoc """
   """
 
@@ -7,7 +7,7 @@ defmodule CommonsPub.Circles.Encircle do
     table_id: "1NSERTSAP01NTER1NT0AC1RC1E",
     source: "cpub_circles_encircle"
 
-  alias CommonsPub.Circles.{Circle, Encircle}
+  alias Bonfire.Data.Social.{Circle, Encircle}
   alias Pointers.{Changesets, Pointer}
 
   pointable_schema do
@@ -19,26 +19,25 @@ defmodule CommonsPub.Circles.Encircle do
     do: Changesets.auto(encircle, attrs, opts, [])
  
 end
-defmodule CommonsPub.Circles.Encircle.Migration do
+defmodule Bonfire.Data.Social.Encircle.Migration do
 
   use Ecto.Migration
   import Pointers.Migration
-  alias CommonsPub.Circles.Encircle
+  alias Bonfire.Data.Social.Encircle
 
   @encircle_table Encircle.__schema__(:source)
   @unique_index [:subject_id, :circle_id]
-  @secondary_index [:circle_id]
 
   # create_encircle_table/{0,1}
 
   defp make_encircle_table(exprs) do
     quote do
       require Pointers.Migration
-      Pointers.Migration.create_pointable_table(CommonsPub.Circles.Encircle) do
+      Pointers.Migration.create_pointable_table(Bonfire.Data.Social.Encircle) do
         Ecto.Migration.add :subject_id,
           Pointers.Migration.strong_pointer()
         Ecto.Migration.add :circle_id,
-          Pointers.Migration.strong_pointer(CommonsPub.Circles.Circle)
+          Pointers.Migration.strong_pointer(Bonfire.Data.Social.Circle)
         unquote_splicing(exprs)
       end
     end
@@ -67,36 +66,35 @@ defmodule CommonsPub.Circles.Encircle.Migration do
   def drop_encircle_unique_index(opts \\ [])
   def drop_encircle_unique_index(opts), do: drop_if_exists(unique_index(@encircle_table, @unique_index, opts))
 
-  defp make_encircle_secondary_index(opts) do
+  defp make_encircle_circle_index(opts) do
     quote do
       Ecto.Migration.create_if_not_exists(
-        Ecto.Migration.index(unquote(@encircle_table), unquote(@secondary_index), unquote(opts))
+        Ecto.Migration.index(unquote(@encircle_table), [:circle_id], unquote(opts))
       )
     end
   end
 
-  defmacro create_encircle_secondary_index(opts \\ [])
-  defmacro create_encircle_secondary_index(opts), do: make_encircle_secondary_index(opts)
+  defmacro create_encircle_circle_index(opts \\ [])
+  defmacro create_encircle_circle_index(opts), do: make_encircle_circle_index(opts)
 
-  def drop_encircle_secondary_index(opts \\ [])
-  def drop_encircle_secondary_index(opts), do: drop_if_exists(index(@encircle_table, @secondary_index, opts))
+  def drop_encircle_circle_index(opts \\ [])
+  def drop_encircle_circle_index(opts), do: drop_if_exists(index(@encircle_table, [:circle_id], opts))
 
   # migrate_encircle/{0,1}
 
   defp me(:up) do
     quote do
-      require CommonsPub.Circles.Encircle.Migration
-      CommonsPub.Circles.Encircle.Migration.create_encircle_table()
-      CommonsPub.Circles.Encircle.Migration.create_encircle_unique_index()
-      CommonsPub.Circles.Encircle.Migration.create_encircle_secondary_index()
+      unquote(make_encircle_table([]))
+      unquote(make_encircle_unique_index([]))
+      unquote(make_encircle_circle_index([]))
     end
   end
 
   defp me(:down) do
     quote do
-      CommonsPub.Circles.Circle.Migration.drop_encircle_secondary_index()
-      CommonsPub.Circles.Circle.Migration.drop_encircle_unique_index()
-      CommonsPub.Circles.Circle.Migration.drop_encircle_table()
+      Bonfire.Data.Social.Circle.Migration.drop_encircle_circle_index()
+      Bonfire.Data.Social.Circle.Migration.drop_encircle_unique_index()
+      Bonfire.Data.Social.Circle.Migration.drop_encircle_table()
     end
   end
 

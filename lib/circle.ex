@@ -1,13 +1,13 @@
-defmodule CommonsPub.Circles.Circle do
+defmodule Bonfire.Data.Social.Circle do
   @moduledoc """
   """
 
   use Pointers.Pointable,
-    otp_app: :cpub_circles,
+    otp_app: :bonfire_data_social,
     table_id: "C1RC1ESAREAV1S1B111TYSC0PE",
-    source: "cpub_circles_circle"
+    source: "bonfire_data_social_circle"
 
-  alias CommonsPub.Circles.Circle
+  alias Bonfire.Data.Social.Circle
   alias Pointers.Changesets
 
   pointable_schema do
@@ -15,20 +15,20 @@ defmodule CommonsPub.Circles.Circle do
 
   def changeset(circle \\ %Circle{}, attrs, opts \\ []),
     do: Changesets.auto(circle, attrs, opts, [])
- 
+
 end
-defmodule CommonsPub.Circles.Circle.Migration do
+defmodule Bonfire.Data.Social.Circle.Migration do
 
   use Ecto.Migration
   import Pointers.Migration
-  alias CommonsPub.Circles.Circle
+  alias Bonfire.Data.Social.Circle
 
   # create_circle_table/{0,1}
 
   defp make_circle_table(exprs) do
     quote do
       require Pointers.Migration
-      Pointers.Migration.create_pointable_table(CommonsPub.Circles.Circle) do
+      Pointers.Migration.create_pointable_table(Bonfire.Data.Social.Circle) do
         unquote_splicing(exprs)
       end
     end
@@ -44,9 +44,8 @@ defmodule CommonsPub.Circles.Circle.Migration do
   # migrate_circle/{0,1}
 
   defp mc(:up), do: make_circle_table([])
-
   defp mc(:down) do
-    quote do: CommonsPub.Circles.Circle.Migration.drop_circle_table()
+    quote do: Bonfire.Data.Social.Circle.Migration.drop_circle_table()
   end
 
   defmacro migrate_circle() do
