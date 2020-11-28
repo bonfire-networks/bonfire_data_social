@@ -2,7 +2,7 @@ defmodule Bonfire.Data.Social.Bookmark do
 
   use Pointers.Pointable,
     otp_app: :bonfire_data_social,
-    table_id: "B10CK1NGSTVFFAV01DSSEE1NG1",
+    table_id: "REMEMBERS0METH1NGSF0R1ATER",
     source: "bonfire_data_social_bookmark"
 
   require Pointers.Changesets
