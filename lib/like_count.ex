@@ -87,13 +87,13 @@ defmodule Bonfire.Data.Social.LikeCount.Migration do
 
   # migrate_like_count/{0,1}
 
-  defp mfc(:up) do
+  defp mlc(:up) do
     quote do
       unquote(make_like_count_table([]))
       unquote(make_like_count_index([]))
     end      
   end
-  defp mfc(:down) do
+  defp mlc(:down) do
     quote do
       Bonfire.Data.Social.LikeCount.Migration.drop_like_count_index()
       Bonfire.Data.Social.LikeCount.Migration.drop_like_count_table()
@@ -103,10 +103,10 @@ defmodule Bonfire.Data.Social.LikeCount.Migration do
   defmacro migrate_like_count() do
     quote do
       if Ecto.Migration.direction() == :up,
-        do: unquote(mfc(:up)),
-        else: unquote(mfc(:down))
+        do: unquote(mlc(:up)),
+        else: unquote(mlc(:down))
     end
   end
-  defmacro migrate_like_count(dir), do: mfc(dir)
+  defmacro migrate_like_count(dir), do: mlc(dir)
 
 end

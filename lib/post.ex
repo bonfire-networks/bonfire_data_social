@@ -1,15 +1,14 @@
 defmodule Bonfire.Data.Social.Post do
   use Pointers.Pointable,
-    otp_app: :bonfire_posts,
+    otp_app: :bonfire_data_social,
     table_id: "B0NF1REP0STTAB1ENVMBER0NEE",
     source: "bonfire_data_social_post"
 
-  alias __MODULE__
+  alias Bonfire.Data.Social.Post
   alias Pointers.Changesets
   alias Pointers.Pointer
 
   pointable_schema do
-    belongs_to :creator, Pointer
   end
 
   def changeset(post \\ %Post{}, attrs, opts \\ []),
@@ -21,14 +20,38 @@ defmodule Bonfire.Data.Social.Post.Migration do
   import Pointers.Migration
   alias Bonfire.Data.Social.Post
 
-  def migrate_post(dir \\ direction())
-  def migrate_post(:up) do
-    create_pointable_table(Post) do
-      add :creator_id, strong_pointer()
+  # create_post_table/{0,1}
+
+  defp make_post_table(exprs) do
+    quote do
+      require Pointers.Migration
+      Pointers.Migration.create_pointable_table(Bonfire.Data.Social.Post) do
+        unquote_splicing(exprs)
+      end
     end
   end
 
-  def migrate_post(:down) do
-    drop_pointable_table(Post)
+  defmacro create_post_table(), do: make_post_table([])
+  defmacro create_post_table([do: body]), do: make_post_table(body)
+
+  # drop_post_table/0
+
+  def drop_post_table(), do: drop_pointable_table(Post)
+
+  # migrate_post/{0,1}
+
+  defp mp(:up), do: make_post_table([])
+  defp mp(:down) do
+    quote do: Bonfire.Data.Social.Post.Migration.drop_post_table()
   end
+
+  defmacro migrate_post() do
+    quote do
+      if Ecto.Migration.direction() == :up,
+        do: unquote(mp(:up)),
+        else: unquote(mp(:down))
+    end
+  end
+  defmacro migrate_post(dir), do: mp(dir)
+
 end

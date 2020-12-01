@@ -85,19 +85,19 @@ defmodule Bonfire.Data.Social.Like.Migration do
   defmacro create_like_liked_index(opts), do: make_like_liked_index(opts)
 
   def drop_like_liked_index(opts \\ []) do
-      drop_if_exists(index(@like_table, [:liked_id], opts))
+    drop_if_exists(index(@like_table, [:liked_id], opts))
   end
 
   # migrate_like/{0,1}
 
-  defp mf(:up) do
+  defp ml(:up) do
     quote do
       unquote(make_like_table([]))
       unquote(make_like_unique_index([]))
       unquote(make_like_liked_index([]))
     end
   end
-  defp mf(:down) do
+  defp ml(:down) do
     quote do
       Bonfire.Data.Social.Like.Migration.drop_like_liked_index()
       Bonfire.Data.Social.Like.Migration.drop_like_unique_index()
@@ -108,11 +108,11 @@ defmodule Bonfire.Data.Social.Like.Migration do
   defmacro migrate_like() do
     quote do
       if Ecto.Migration.direction() == :up,
-        do: unquote(mf(:up)),
-        else: unquote(mf(:down))
+        do: unquote(ml(:up)),
+        else: unquote(ml(:down))
     end
   end
 
-  defmacro migrate_like(dir), do: mf(dir)
+  defmacro migrate_like(dir), do: ml(dir)
 
 end

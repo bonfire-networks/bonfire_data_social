@@ -85,7 +85,7 @@ defmodule Bonfire.Data.Social.Follow.Migration do
   defmacro create_follow_followed_index(opts), do: make_follow_followed_index(opts)
 
   def drop_follow_followed_index(opts \\ []) do
-      drop_if_exists(index(@follow_table, [:followed_id], opts))
+    drop_if_exists(index(@follow_table, [:followed_id], opts))
   end
 
   # migrate_follow/{0,1}
