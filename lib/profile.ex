@@ -58,7 +58,6 @@ defmodule Bonfire.Data.Social.Profile.Migration do
 
   defp mp(:down) do
     quote do
-      Bonfire.Data.Social.Profile.Migration.drop_profile_account_index()
       Bonfire.Data.Social.Profile.Migration.drop_profile_table()
     end
   end

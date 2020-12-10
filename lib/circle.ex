@@ -7,10 +7,11 @@ defmodule Bonfire.Data.Social.Circle do
     table_id: "C1RC1ESAREAV1S1B111TYSC0PE",
     source: "bonfire_data_social_circle"
 
-  alias Bonfire.Data.Social.Circle
+  alias Bonfire.Data.Social.{Circle, Encircle}
   alias Pointers.Changesets
 
   pointable_schema do
+    has_many :encircles, Encircle
   end
 
   def changeset(circle \\ %Circle{}, attrs, opts \\ []),

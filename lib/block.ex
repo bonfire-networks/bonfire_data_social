@@ -79,7 +79,7 @@ defmodule Bonfire.Data.Social.Block.Migration do
   defmacro create_block_blocked_index(opts), do: make_block_blocked_index(opts)
 
   def drop_block_blocked_index(opts \\ []) do
-      drop_if_exists(index(@block_table, [:blocked_id], opts))
+    drop_if_exists(index(@block_table, [:blocked_id], opts))
   end
 
   # migrate_block/{0,1}

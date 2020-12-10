@@ -3,9 +3,9 @@ defmodule Bonfire.Data.Social.Encircle do
   """
 
   use Pointers.Pointable,
-    otp_app: :cpub_circles,
+    otp_app: :bonfire_data_social,
     table_id: "1NSERTSAP01NTER1NT0AC1RC1E",
-    source: "cpub_circles_encircle"
+    source: "bonfire_data_social_encircle"
 
   alias Bonfire.Data.Social.{Circle, Encircle}
   alias Pointers.{Changesets, Pointer}
@@ -92,9 +92,9 @@ defmodule Bonfire.Data.Social.Encircle.Migration do
 
   defp me(:down) do
     quote do
-      Bonfire.Data.Social.Circle.Migration.drop_encircle_circle_index()
-      Bonfire.Data.Social.Circle.Migration.drop_encircle_unique_index()
-      Bonfire.Data.Social.Circle.Migration.drop_encircle_table()
+      Bonfire.Data.Social.Encircle.Migration.drop_encircle_circle_index()
+      Bonfire.Data.Social.Encircle.Migration.drop_encircle_unique_index()
+      Bonfire.Data.Social.Encircle.Migration.drop_encircle_table()
     end
   end
 
