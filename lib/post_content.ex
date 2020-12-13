@@ -6,6 +6,11 @@ defmodule Bonfire.Data.Social.PostContent do
   alias Bonfire.Data.Social.PostContent
   alias Pointers.Changesets
 
+  @defaults [
+    cast: [:name, :summary, :html_content],
+    required: []
+  ]
+
   mixin_schema do
     field :name, :string
     field :summary, :string
@@ -13,7 +18,7 @@ defmodule Bonfire.Data.Social.PostContent do
   end
 
   def changeset(content \\ %PostContent{}, attrs, opts \\ []),
-    do: Changesets.auto(content, attrs, opts, [])
+    do: Changesets.auto(content, attrs, opts, @defaults)
 
 end
 
