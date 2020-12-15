@@ -4,19 +4,22 @@ defmodule Bonfire.Data.Social.Created do
     source: "bonfire_data_social_created"
 
   alias Bonfire.Data.Social.Created
-  alias Pointers.{Changesets, Pointer}
+  alias Ecto.Changeset
+  alias Pointers.Pointer
 
   mixin_schema do
     belongs_to :creator, Pointer
   end
 
-  @defaults [
-    cast: [:creator_id],
-    required: [:creator_id]
-  ]
+  @cast [:creator_id]
+  @required [:creator_id]
 
-  def changeset(created \\ %Created{}, attrs, opts \\ []),
-    do: Changesets.auto(created, attrs, opts, @defaults)
+  def changeset(created \\ %Created{}, attrs) do
+    created
+    |> Changeset.cast(attrs, @cast)
+    |> Changeset.validate_required(@required)
+    |> Changeset.assoc_constraint(:creator)
+  end
 end
 
 defmodule Bonfire.Data.Social.Created.Migration do
