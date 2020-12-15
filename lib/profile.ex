@@ -4,7 +4,7 @@ defmodule Bonfire.Data.Social.Profile do
     otp_app: :bonfire_data_social,
     source: "bonfire_data_social_profile"
 
-  alias Pointers.Changesets
+  alias Ecto.Changeset
   alias Bonfire.Data.Social.Profile
   
   mixin_schema do
@@ -14,15 +14,14 @@ defmodule Bonfire.Data.Social.Profile do
     # belongs_to :image, Content
   end
 
-  @defaults [
-    cast: [:name, :summary],
-    required: [:name, :summary],
-    name: [length: [min: 3, max: 50]],
-    summary: [length: [min: 20, max: 500]],
-  ]
+  @cast     [:name, :summary]
+  @required @cast
 
-  def changeset(prof \\ %Profile{}, attrs, opts \\ []),
-    do: Changesets.auto(prof, attrs, opts, @defaults)
+  def changeset(profile \\ %Profile{}, params) do
+    profile
+    |> Changeset.cast(params, @cast)
+    |> Changeset.validate_required(@required)
+  end
 
 end
 defmodule Bonfire.Data.Social.Profile.Migration do

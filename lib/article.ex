@@ -5,14 +5,16 @@ defmodule Bonfire.Data.Social.Article do
     source: "bonfire_data_social_article"
 
   alias Bonfire.Data.Social.Article
-  alias Pointers.Changesets
+  alias Ecto.Changeset
   alias Pointers.Pointer
 
   pointable_schema do
   end
 
-  def changeset(article \\ %Article{}, attrs, opts \\ []),
-    do: Changesets.auto(article, attrs, opts, [])
+  def changeset(article \\ %Article{}, params) do
+    Changeset.cast(article, params, [])
+  end
+
 end
 
 defmodule Bonfire.Data.Social.Article.Migration do

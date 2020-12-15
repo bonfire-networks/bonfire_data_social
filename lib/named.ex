@@ -4,16 +4,17 @@ defmodule Bonfire.Data.Social.Named do
     source: "bonfire_data_social_named"
 
   alias Bonfire.Data.Social.Named
-  alias Pointers.Changesets
+  alias Ecto.Changeset
 
   mixin_schema do
     field :name, :string
   end
 
-  @defaults [cast: [:name], required: []]
+  @cast [:name]
 
-  def changeset(content \\ %Named{}, attrs, opts \\ []),
-    do: Changesets.auto(content, attrs, opts, @defaults)
+  def changeset(named \\ %Named{}, params, opts \\ []) do
+    Changeset.cast(named, params, @cast)
+  end
 
 end
 

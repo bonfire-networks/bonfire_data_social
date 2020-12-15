@@ -8,15 +8,14 @@ defmodule Bonfire.Data.Social.Feed do
   require Pointers.Changesets
   alias Bonfire.Data.Social.Feed
   alias Ecto.Changeset
-  alias Pointers.{Changesets, Pointer}
+  alias Pointers.Pointer
   
   pointable_schema do
   end
 
-  @defaults [cast: [], required: []]
 
-  def changeset(feed \\ %Feed{}, attrs, opts \\ []) do
-    Changesets.auto(feed, attrs, opts, @defaults)
+  def changeset(feed \\ %Feed{}, params) do
+    Changeset.cast(feed, params, [])
   end
 
 end

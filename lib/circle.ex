@@ -8,14 +8,15 @@ defmodule Bonfire.Data.Social.Circle do
     source: "bonfire_data_social_circle"
 
   alias Bonfire.Data.Social.{Circle, Encircle}
-  alias Pointers.Changesets
+  alias Ecto.Changeset
 
   pointable_schema do
     has_many :encircles, Encircle
   end
 
-  def changeset(circle \\ %Circle{}, attrs, opts \\ []),
-    do: Changesets.auto(circle, attrs, opts, [])
+  def changeset(circle \\ %Circle{}, params) do
+    Changeset.cast(circle, params, [])
+  end
 
 end
 defmodule Bonfire.Data.Social.Circle.Migration do

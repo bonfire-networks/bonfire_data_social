@@ -7,19 +7,24 @@ defmodule Bonfire.Data.Social.Block do
 
   require Pointers.Changesets
   alias Bonfire.Data.Social.Block
-  alias Pointers.{Changesets, Pointer}
+  alias Ecto.Changeset
+  alias Pointers.Pointer
   
   pointable_schema do
     belongs_to :blocker, Pointer
     belongs_to :blocked, Pointer
   end
 
-  @defaults [
-    cast:     [:blocker_id, :blocked_id],
-    required: [:blocker_id, :blocked_id],
-  ]
-  def changeset(block \\ %Block{}, attrs, opts \\ []),
-    do: Changesets.auto(block, attrs, opts, @defaults)
+  @cast     [:blocker_id, :blocked_id]
+  @required @cast
+
+  def changeset(block \\ %Block{}, params) do
+    block
+    |> Changeset.cast(params, @cast)
+    |> Changeset.validate_required(@required)
+    |> Changeset.assoc_constraint(:blocker)
+    |> Changeset.assoc_constraint(:blocked)
+  end
 
 end
 defmodule Bonfire.Data.Social.Block.Migration do
@@ -37,8 +42,8 @@ defmodule Bonfire.Data.Social.Block.Migration do
     quote do
       require Pointers.Migration
       Pointers.Migration.create_pointable_table(Bonfire.Data.Social.Block) do
-        Ecto.Migration.add :blocker_id, strong_pointer(), null: false
-        Ecto.Migration.add :blocked_id, strong_pointer(), null: false
+        Ecto.Migration.add :blocker_id, Pointers.Migration.strong_pointer(), null: false
+        Ecto.Migration.add :blocked_id, Pointers.Migration.strong_pointer(), null: false
         unquote_splicing(exprs)
       end
     end

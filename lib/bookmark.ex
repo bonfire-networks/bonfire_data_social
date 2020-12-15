@@ -7,19 +7,24 @@ defmodule Bonfire.Data.Social.Bookmark do
 
   require Pointers.Changesets
   alias Bonfire.Data.Social.Bookmark
-  alias Pointers.{Changesets, Pointer}
+  alias Ecto.Changeset
+  alias Pointers.Pointer
   
   pointable_schema do
     belongs_to :bookmarker, Pointer
     belongs_to :bookmarked, Pointer
   end
 
-  @defaults [
-    cast:     [:bookmarker_id, :bookmarked_id],
-    required: [:bookmarker_id, :bookmarked_id],
-  ]
-  def changeset(bookmark \\ %Bookmark{}, attrs, opts \\ []),
-    do: Changesets.auto(bookmark, attrs, opts, @defaults)
+  @cast     [:bookmarker_id, :bookmarked_id]
+  @required [:bookmarker_id, :bookmarked_id]
+
+  def changeset(bookmark \\ %Bookmark{}, params) do
+    bookmark
+    |> Changeset.cast(params, @cast)
+    |> Changeset.validate_required(@required)
+    |> Changeset.assoc_constraint(:bookmarker)
+    |> Changeset.assoc_constraint(:bookmarked)
+  end
 
 end
 defmodule Bonfire.Data.Social.Bookmark.Migration do
@@ -36,8 +41,10 @@ defmodule Bonfire.Data.Social.Bookmark.Migration do
     quote do
       require Pointers.Migration
       Pointers.Migration.create_pointable_table(Bonfire.Data.Social.Bookmark) do
-        Ecto.Migration.add :bookmarker_id, strong_pointer(), null: false
-        Ecto.Migration.add :bookmarked_id, strong_pointer(), null: false
+        Ecto.Migration.add :bookmarker_id,
+          Pointers.Migration.strong_pointer(), null: false
+        Ecto.Migration.add :bookmarked_id,
+          Pointers.Migration.strong_pointer(), null: false
         unquote_splicing(exprs)
       end
     end

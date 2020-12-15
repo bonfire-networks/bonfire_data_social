@@ -15,16 +15,15 @@ defmodule Bonfire.Data.Social.Like do
     belongs_to :liked, Pointer
   end
 
-  @defaults [
-    cast:     [:liker_id, :liked_id],
-    required: [:liker_id, :liked_id],
-  ]
+  @cast     [:liker_id, :liked_id]
+  @required [:liker_id, :liked_id]
 
-  def changeset(like \\ %Like{}, attrs, opts \\ []) do
-    Changesets.auto(like, attrs, opts, @defaults)
-    |> Changeset.assoc_constraint(:liker)
+  def changeset(like \\ %Like{}, params) do
+    like
+    |> Changeset.cast(params, @cast)
+    |> Changeset.validate_required(@required)
+    |> Changeset.assoc_constraint(:likker)
     |> Changeset.assoc_constraint(:liked)
-    |> Changeset.unique_constraint([:liker_id, :liked_id])
   end
 
 end
@@ -43,8 +42,10 @@ defmodule Bonfire.Data.Social.Like.Migration do
     quote do
       require Pointers.Migration
       Pointers.Migration.create_pointable_table(Bonfire.Data.Social.Like) do
-        Ecto.Migration.add :liker_id, strong_pointer(), null: false
-        Ecto.Migration.add :liked_id, strong_pointer(), null: false
+        Ecto.Migration.add :liker_id,
+          Pointers.Migration.strong_pointer(), null: false
+        Ecto.Migration.add :liked_id,
+          Pointers.Migration.strong_pointer(), null: false
         unquote_splicing(exprs)
       end
     end

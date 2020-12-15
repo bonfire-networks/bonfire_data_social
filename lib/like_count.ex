@@ -4,21 +4,18 @@ defmodule Bonfire.Data.Social.LikeCount do
     otp_app: :bonfire_data_social,
     source: "bonfire_data_social_like_count"
 
-  alias Pointers.Changesets
-  require Pointers.Changesets
   alias Bonfire.Data.Social.LikeCount
+  alias Ecto.Changeset
   
   mixin_schema do
     field :like_count, :integer, default: 0
     field :liker_count, :integer, default: 0
   end
 
-  @defaults [
-    cast: [:like_count, :liker_count],
-  ]
+  @cast [:like_count, :liker_count]
 
-  def changeset(fc \\ %LikeCount{}, attrs, opts \\ []) do
-    Changesets.auto(fc, attrs, opts, @defaults)
+  def changeset(fc \\ %LikeCount{}, params) do
+    Changeset.cast(fc, params, @cast)
   end
 
 end

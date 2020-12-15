@@ -4,16 +4,22 @@ defmodule Bonfire.Data.Social.PostContent do
     source: "bonfire_data_social_post_content"
 
   alias Bonfire.Data.Social.PostContent
-  alias Pointers.Changesets
+  alias Ecto.Changeset
 
   mixin_schema do
     field :name, :string
     field :summary, :string
-    field :html_content, :string
+    field :html_body, :string
   end
 
-  def changeset(content \\ %PostContent{}, attrs, opts \\ []),
-    do: Changesets.auto(content, attrs, opts, [])
+  @cast [:name, :summary, :html_body]
+  @required [:html_body]
+
+  def changeset(content \\ %PostContent{}, params, opts \\ []) do
+    content
+    |> Changeset.cast(params, @cast)
+    |> Changeset.validate_required(@required)
+  end
 
 end
 

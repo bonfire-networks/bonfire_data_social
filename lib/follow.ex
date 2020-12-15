@@ -8,23 +8,23 @@ defmodule Bonfire.Data.Social.Follow do
   require Pointers.Changesets
   alias Bonfire.Data.Social.Follow
   alias Ecto.Changeset
-  alias Pointers.{Changesets, Pointer}
+  alias Pointers.Pointer
   
   pointable_schema do
     belongs_to :follower, Pointer
     belongs_to :followed, Pointer
   end
 
-  @defaults [
-    cast:     [:follower_id, :followed_id],
-    required: [:follower_id, :followed_id],
-  ]
 
-  def changeset(follow \\ %Follow{}, attrs, opts \\ []) do
-    Changesets.auto(follow, attrs, opts, @defaults)
+  @cast     [:follower_id, :followed_id]
+  @required @cast
+
+  def changeset(follow \\ %Follow{}, params) do
+    follow
+    |> Changeset.cast(params, @cast)
+    |> Changeset.validate_required(@required)
     |> Changeset.assoc_constraint(:follower)
     |> Changeset.assoc_constraint(:followed)
-    |> Changeset.unique_constraint([:follower_id, :followed_id])
   end
 
 end
@@ -43,8 +43,10 @@ defmodule Bonfire.Data.Social.Follow.Migration do
     quote do
       require Pointers.Migration
       Pointers.Migration.create_pointable_table(Bonfire.Data.Social.Follow) do
-        Ecto.Migration.add :follower_id, strong_pointer(), null: false
-        Ecto.Migration.add :followed_id, strong_pointer(), null: false
+        Ecto.Migration.add :follower_id,
+          Pointers.Migration.strong_pointer(), null: false
+        Ecto.Migration.add :followed_id,
+          Pointers.Migration.strong_pointer(), null: false
         unquote_splicing(exprs)
       end
     end

@@ -8,23 +8,22 @@ defmodule Bonfire.Data.Social.Mention do
   require Pointers.Changesets
   alias Bonfire.Data.Social.Mention
   alias Ecto.Changeset
-  alias Pointers.{Changesets, Pointer}
+  alias Pointers.Pointer
   
   pointable_schema do
     belongs_to :mentioner, Pointer
     belongs_to :mentioned, Pointer
   end
 
-  @defaults [
-    cast:     [:mentioner_id, :mentioned_id],
-    required: [:mentioner_id, :mentioned_id],
-  ]
+  @cast     [:mentioner_id, :mentioned_id]
+  @required @cast
 
-  def changeset(mention \\ %Mention{}, attrs, opts \\ []) do
-    Changesets.auto(mention, attrs, opts, @defaults)
+  def changeset(mention \\ %Mention{}, params) do
+    mention
+    |> Changeset.cast(params, @cast)
+    |> Changeset.validate_required(@required)
     |> Changeset.assoc_constraint(:mentioner)
     |> Changeset.assoc_constraint(:mentioned)
-    |> Changeset.unique_constraint([:mentioner_id, :mentioned_id])
   end
 
 end
@@ -42,8 +41,10 @@ defmodule Bonfire.Data.Social.Mention.Migration do
     quote do
       require Pointers.Migration
       Pointers.Migration.create_pointable_table(Bonfire.Data.Social.Mention) do
-        Ecto.Migration.add :mentioner_id, strong_pointer(), null: false
-        Ecto.Migration.add :mentioned_id, strong_pointer(), null: false
+        Ecto.Migration.add :mentioner_id,
+          Pointers.Migration.strong_pointer(), null: false
+        Ecto.Migration.add :mentioned_id,
+          Pointers.Migration.strong_pointer(), null: false
         unquote_splicing(exprs)
       end
     end
@@ -85,7 +86,7 @@ defmodule Bonfire.Data.Social.Mention.Migration do
   defmacro create_mention_mentioned_index(opts), do: make_mention_mentioned_index(opts)
 
   def drop_mention_mentioned_index(opts \\ []) do
-      drop_if_exists(index(@mention_table, [:mentioned_id], opts))
+    drop_if_exists(index(@mention_table, [:mentioned_id], opts))
   end
 
   # migrate_mention/{0,1}

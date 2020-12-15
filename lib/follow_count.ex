@@ -4,21 +4,18 @@ defmodule Bonfire.Data.Social.FollowCount do
     otp_app: :bonfire_data_social,
     source: "bonfire_data_social_follow_count"
 
-  alias Pointers.Changesets
-  require Pointers.Changesets
   alias Bonfire.Data.Social.FollowCount
+  alias Ecto.Changeset
   
   mixin_schema do
     field :follow_count, :integer, default: 0
     field :follower_count, :integer, default: 0
   end
 
-  @defaults [
-    cast: [:follow_count, :follower_count],
-  ]
+  @cast [:follow_count, :follower_count]
 
-  def changeset(fc \\ %FollowCount{}, attrs, opts \\ []) do
-    Changesets.auto(fc, attrs, opts, @defaults)
+  def changeset(fc \\ %FollowCount{}, params) do
+    Changeset.cast(fc, params, @cast)
   end
 
 end
