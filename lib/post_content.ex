@@ -6,6 +6,11 @@ defmodule Bonfire.Data.Social.PostContent do
   alias Bonfire.Data.Social.PostContent
   alias Ecto.Changeset
 
+  @defaults [
+    cast: [:name, :summary, :html_content],
+    required: []
+  ]
+
   mixin_schema do
     field :name, :string
     field :summary, :string
