@@ -6,11 +6,6 @@ defmodule Bonfire.Data.Social.PostContent do
   alias Bonfire.Data.Social.PostContent
   alias Ecto.Changeset
 
-  @defaults [
-    cast: [:name, :summary, :html_content],
-    required: []
-  ]
-
   mixin_schema do
     field :name, :string
     field :summary, :string
@@ -20,12 +15,11 @@ defmodule Bonfire.Data.Social.PostContent do
   @cast [:name, :summary, :html_body]
   @required [:html_body]
 
-  def changeset(content \\ %PostContent{}, params, opts \\ []) do
+  def changeset(content \\ %PostContent{}, params) do
     content
     |> Changeset.cast(params, @cast)
     |> Changeset.validate_required(@required)
   end
-
 end
 
 defmodule Bonfire.Data.Social.PostContent.Migration do
@@ -41,7 +35,7 @@ defmodule Bonfire.Data.Social.PostContent.Migration do
       Pointers.Migration.create_mixin_table(Bonfire.Data.Social.PostContent) do
         Ecto.Migration.add :name, :text
         Ecto.Migration.add :summary, :text
-        Ecto.Migration.add :html_content, :text
+        Ecto.Migration.add :html_body, :text
         unquote_splicing(exprs)
       end
     end

@@ -6,7 +6,6 @@ defmodule Bonfire.Data.Social.Post do
 
   alias Bonfire.Data.Social.Post
   alias Ecto.Changeset
-  alias Pointers.Pointer
 
   pointable_schema do
   end
