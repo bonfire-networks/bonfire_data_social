@@ -17,7 +17,7 @@ defmodule Bonfire.Data.Social.Encircle do
   end
 
   @cast     [:subject_id, :circle_id]
-  @required @cast
+  @required [:circle_id]
 
   def changeset(encircle \\ %Encircle{}, params) do
     encircle
