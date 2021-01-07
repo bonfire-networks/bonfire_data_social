@@ -6,16 +6,18 @@ defmodule Bonfire.Data.Social.Profile do
 
   alias Ecto.Changeset
   alias Bonfire.Data.Social.Profile
-  
+
   mixin_schema do
     field :name, :string
     field :summary, :string
+    field :website, :string
+    field :location, :string
     # belongs_to :icon, Content
     # belongs_to :image, Content
   end
 
-  @cast     [:name, :summary]
-  @required @cast
+  @cast     [:name, :summary, :website, :location]
+  @required [:name]
 
   def changeset(profile \\ %Profile{}, params) do
     profile
@@ -37,6 +39,8 @@ defmodule Bonfire.Data.Social.Profile.Migration do
       Pointers.Migration.create_mixin_table(Bonfire.Data.Social.Profile) do
         Ecto.Migration.add :name, :text
         Ecto.Migration.add :summary, :text
+        Ecto.Migration.add :website, :text
+        Ecto.Migration.add :location, :text
         # Ecto.Migration.add :icon, strong_pointer(Content)
         # Ecto.Migration.add :image, strong_pointer(Content)
         unquote_splicing(exprs)
