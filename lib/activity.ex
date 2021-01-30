@@ -25,6 +25,7 @@ defmodule Bonfire.Data.Social.Activity do
     |> Changeset.assoc_constraint(:subject)
     |> Changeset.assoc_constraint(:object)
     |> Changeset.assoc_constraint(:verb)
+    |> Changeset.unique_constraint([:subject_id, :verb_id, :object_id])
   end
 
 end

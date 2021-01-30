@@ -9,7 +9,7 @@ defmodule Bonfire.Data.Social.Follow do
   alias Bonfire.Data.Social.Follow
   alias Ecto.Changeset
   alias Pointers.Pointer
-  
+
   pointable_schema do
     belongs_to :follower, Pointer
     belongs_to :followed, Pointer
@@ -25,6 +25,7 @@ defmodule Bonfire.Data.Social.Follow do
     |> Changeset.validate_required(@required)
     |> Changeset.assoc_constraint(:follower)
     |> Changeset.assoc_constraint(:followed)
+    |> Changeset.unique_constraint([:follower_id, :followed_id])
   end
 
 end

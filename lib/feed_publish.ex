@@ -3,13 +3,13 @@ defmodule Bonfire.Data.Social.FeedPublish do
   use Pointers.Pointable,
     otp_app: :bonfire_data_social,
     table_id: "PVTT1NGS0METH1NGS1NT0AFEED",
-    source: "bonfire_data_social_feed"
+    source: "bonfire_data_social_feed_publish"
 
   require Pointers.Changesets
   alias Bonfire.Data.Social.{Feed, FeedPublish}
   alias Ecto.Changeset
   alias Pointers.Pointer
-  
+
   pointable_schema do
     belongs_to :feed, Feed
     belongs_to :object, Pointer
@@ -107,7 +107,7 @@ defmodule Bonfire.Data.Social.FeedPublish.Migration do
     end
   end
 
-  defmacro migrate_feed() do
+  defmacro migrate_feed_publish() do
     quote do
       if Ecto.Migration.direction() == :up,
         do: unquote(mf(:up)),
@@ -115,6 +115,6 @@ defmodule Bonfire.Data.Social.FeedPublish.Migration do
     end
   end
 
-  defmacro migrate_feed(dir), do: mf(dir)
+  defmacro migrate_feed_publish(dir), do: mf(dir)
 
 end
