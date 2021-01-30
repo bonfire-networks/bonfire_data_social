@@ -1,7 +1,7 @@
 defmodule Bonfire.Data.Social.Post do
   use Pointers.Pointable,
     otp_app: :bonfire_data_social,
-    table_id: "B0NF1REP0STTAB1ENVMBER0NEE",
+    table_id: "30NF1REP0STTAB1ENVMBER0NEE",
     source: "bonfire_data_social_post"
 
   alias Bonfire.Data.Social.Post
