@@ -6,13 +6,16 @@ defmodule Bonfire.Data.Social.FeedPublish do
     source: "bonfire_data_social_feed_publish"
 
   require Pointers.Changesets
-  alias Bonfire.Data.Social.{Feed, FeedPublish}
+  alias Bonfire.Data.Social.{Feed, FeedPublish, Activity}
   alias Ecto.Changeset
   alias Pointers.Pointer
 
   pointable_schema do
     belongs_to :feed, Feed
     belongs_to :object, Pointer
+
+    # activity aliases object so we can associate them directly
+    belongs_to :activity, Activity, foreign_key: :object_id, define_field: false
   end
 
   @cast     [:feed_id, :object_id]
