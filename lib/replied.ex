@@ -3,6 +3,10 @@ defmodule Bonfire.Data.Social.Replied do
     otp_app: :bonfire_data_social,
     source: "bonfire_data_social_replied"
 
+  # to query trees:
+  use EctoMaterializedPath
+  # use Arbor.Tree, primary_key: :id , primary_key_type: Pointers.ULID, foreign_key: :reply_to_id, foreign_key_type: Pointers.ULID
+
   alias Bonfire.Data.Social.Replied
   alias Ecto.Changeset
   alias Pointers.Pointer
@@ -10,16 +14,25 @@ defmodule Bonfire.Data.Social.Replied do
   mixin_schema do
     belongs_to :thread, Pointer
     belongs_to :reply_to, Pointer
+    # field :depth, :integer, virtual: true
+    field :path, EctoMaterializedPath.ULIDs, default: [] # default is important here
   end
 
   @cast [:reply_to_id, :thread_id]
   @required [:reply_to_id]
 
-  def changeset(replied \\ %Replied{}, attrs) do
+  def changeset(replied \\ %Replied{}, %{reply_to: reply_to} = attrs) do
     replied
     |> Changeset.cast(attrs, @cast)
     |> Changeset.validate_required(@required)
+    |> make_child_of(reply_to) # set tree path (powered by EctoMaterializedPath)
     |> Changeset.assoc_constraint(:reply_to)
+  end
+
+  # for top-level posts
+  def changeset(replied, attrs) do
+    replied
+    |> Changeset.cast(attrs, @cast)
   end
 end
 
@@ -36,6 +49,7 @@ defmodule Bonfire.Data.Social.Replied.Migration do
       Pointers.Migration.create_mixin_table("bonfire_data_social_replied") do
         Ecto.Migration.add :thread_id, Pointers.Migration.strong_pointer()
         Ecto.Migration.add :reply_to_id, Pointers.Migration.strong_pointer()
+        Ecto.Migration.add :path, {:array, :uuid}, default: [], null: false
         unquote_splicing(exprs)
       end
     end
