@@ -9,7 +9,7 @@ defmodule Bonfire.Data.Social.Like do
   alias Bonfire.Data.Social.Like
   alias Ecto.Changeset
   alias Pointers.{Changesets, Pointer}
-  
+
   pointable_schema do
     belongs_to :liker, Pointer
     belongs_to :liked, Pointer
@@ -22,7 +22,7 @@ defmodule Bonfire.Data.Social.Like do
     like
     |> Changeset.cast(params, @cast)
     |> Changeset.validate_required(@required)
-    |> Changeset.assoc_constraint(:likker)
+    |> Changeset.assoc_constraint(:liker)
     |> Changeset.assoc_constraint(:liked)
   end
 
