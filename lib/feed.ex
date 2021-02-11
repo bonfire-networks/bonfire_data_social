@@ -1,8 +1,8 @@
 defmodule Bonfire.Data.Social.Feed do
 
-  use Pointers.Mixin,
+  use Pointers.Pointable,
     otp_app: :bonfire_data_social,
-    # table_id: "1TFEEDS0NTHES0V1S0FM0RTA1S",
+    table_id: "1TFEEDS0NTHES0V1S0FM0RTA1S",
     source: "bonfire_data_social_feed"
 
   require Pointers.Changesets
@@ -11,10 +11,9 @@ defmodule Bonfire.Data.Social.Feed do
   alias Ecto.Changeset
   alias Pointers.Pointer
 
-  mixin_schema do
+  pointable_schema do
     has_many :feed_publishes, FeedPublish, references: :id
   end
-
 
   def changeset(feed \\ %Feed{}, params) do
     Changeset.cast(feed, params, [:id])
@@ -34,7 +33,7 @@ defmodule Bonfire.Data.Social.Feed.Migration do
   defp make_feed_table(exprs) do
     quote do
       require Pointers.Migration
-      Pointers.Migration.create_mixin_table(Bonfire.Data.Social.Feed) do
+      Pointers.Migration.create_pointable_table(Bonfire.Data.Social.Feed) do
         unquote_splicing(exprs)
       end
     end
@@ -45,7 +44,7 @@ defmodule Bonfire.Data.Social.Feed.Migration do
 
   # drop_feed_table/0
 
-  def drop_feed_table(), do: drop_mixin_table(Feed)
+  def drop_feed_table(), do: drop_pointable_table(Feed)
 
   # migrate_feed/{0,1}
 

@@ -24,6 +24,7 @@ defmodule Bonfire.Data.Social.Like do
     |> Changeset.validate_required(@required)
     |> Changeset.assoc_constraint(:liker)
     |> Changeset.assoc_constraint(:liked)
+    |> Changeset.unique_constraint([:liker_id, :liked_id])
   end
 
 end

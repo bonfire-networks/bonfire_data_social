@@ -11,7 +11,9 @@ defmodule Bonfire.Data.Social.FeedPublish do
   alias Pointers.Pointer
 
   pointable_schema do
-    belongs_to :feed, Feed
+    belongs_to :feed, Pointer
+    # belongs_to :timeline, Timeline, foreign_key: :object_id, define_field: false
+
     belongs_to :object, Pointer
 
     # activity aliases object so we can associate them directly
