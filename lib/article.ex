@@ -4,6 +4,8 @@ defmodule Bonfire.Data.Social.Article do
     table_id: "B10GP0ST0RS0METH1NGS1M11AR",
     source: "bonfire_data_social_article"
 
+  # Note: we're using Post instead
+
   alias Bonfire.Data.Social.Article
   alias Ecto.Changeset
   alias Pointers.Pointer
