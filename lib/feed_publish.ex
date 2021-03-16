@@ -2,7 +2,7 @@ defmodule Bonfire.Data.Social.FeedPublish do
 
   use Pointers.Pointable,
     otp_app: :bonfire_data_social,
-    table_id: "PVTT1NGS0METH1NGS1NT0AFEED",
+    table_id: "6VTT1NGS0METH1NGS1NT0AFEED",
     source: "bonfire_data_social_feed_publish"
 
   require Pointers.Changesets
