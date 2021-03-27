@@ -26,7 +26,7 @@ defmodule Bonfire.Data.Social.Encircle do
     |> Changeset.assoc_constraint(:subject)
     |> Changeset.assoc_constraint(:circle)
   end
- 
+
 end
 defmodule Bonfire.Data.Social.Encircle.Migration do
 

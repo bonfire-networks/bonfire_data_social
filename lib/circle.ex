@@ -11,7 +11,7 @@ defmodule Bonfire.Data.Social.Circle do
   alias Ecto.Changeset
 
   pointable_schema do
-    has_many :encircles, Encircle
+    has_many :encircles, Encircle, on_replace: :delete_if_exists
   end
 
   def changeset(circle \\ %Circle{}, params) do
