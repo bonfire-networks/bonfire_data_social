@@ -60,12 +60,12 @@ language plpgsql
 
          -- Decrement the number of things the current unfollower follows
          update #{@table}
-             set follow_count = GREATEST(0::bigint, #{@table}.follow_count - 1)
+             set follow_count = #{@table}.follow_count - 1
              where #{@table}.id = OLD."follower_id";
 
          -- Decrement the number of followers of the thing being unfollowed
          update #{@table}
-             set follower_count = GREATEST(0::bigint, #{@table}.follower_count - 1)
+             set follower_count = #{@table}.follower_count - 1
              where #{@table}.id = OLD."followed_id";
 
          RETURN NULL;
