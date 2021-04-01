@@ -164,7 +164,7 @@ language plpgsql
   end
   defp mlc(:down) do
     quote do
-      Bonfire.Data.Social.BoostCount.Migration.migrate_functions()
+      # Bonfire.Data.Social.BoostCount.Migration.migrate_functions()
 
       Bonfire.Data.Social.BoostCount.Migration.drop_boost_count_index()
       Bonfire.Data.Social.BoostCount.Migration.drop_boost_count_table()

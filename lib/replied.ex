@@ -125,22 +125,18 @@ language plpgsql
   defp make_replied_table(exprs) do
     quote do
       require Pointers.Migration
-      Pointers.Migration.create_mixin_table(@table) do
+      Pointers.Migration.create_mixin_table(unquote(@table)) do
 
         Ecto.Migration.add :reply_to_id, Pointers.Migration.strong_pointer()
         Ecto.Migration.add :thread_id, Pointers.Migration.strong_pointer()
 
         Ecto.Migration.add :path, {:array, :uuid}, default: [], null: false
 
+        Ecto.Migration.add :direct_replies_count, :bigint, null: false, default: 0
+        Ecto.Migration.add :nested_replies_count, :bigint, null: false, default: 0
+
         unquote_splicing(exprs)
       end
-    end
-  end
-
-  def add_count_fields() do
-    alter table(@table) do
-      Ecto.Migration.add :direct_replies_count, :bigint, null: false, default: 0
-      Ecto.Migration.add :nested_replies_count, :bigint, null: false, default: 0
     end
   end
 
@@ -154,20 +150,14 @@ language plpgsql
   # migrate_replied/{0, 1}
 
   defp mcd(:up) do
-
     make_replied_table([])
-
-    add_count_fields()
-
-    Ecto.Migration.flush()
-
-    migrate_functions()
+    # Ecto.Migration.flush()
+    # migrate_functions()
   end
 
   defp mcd(:down) do
     quote do
-      Bonfire.Data.Social.Replied.Migration.migrate_functions()
-
+      # Bonfire.Data.Social.Replied.Migration.migrate_functions()
       Bonfire.Data.Social.Replied.Migration.drop_replied_table()
     end
   end
