@@ -18,6 +18,7 @@ defmodule Bonfire.Data.Social.Encircle do
 
   @cast     [:subject_id, :circle_id]
   @required [:circle_id]
+  @unique_index [:subject_id, :circle_id]
 
   def changeset(encircle \\ %Encircle{}, params) do
     encircle
@@ -25,6 +26,7 @@ defmodule Bonfire.Data.Social.Encircle do
     |> Changeset.validate_required(@required)
     |> Changeset.assoc_constraint(:subject)
     |> Changeset.assoc_constraint(:circle)
+    |> Changeset.unique_constraint(@unique_index)
   end
 
 end
