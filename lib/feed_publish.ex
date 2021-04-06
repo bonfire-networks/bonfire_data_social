@@ -29,6 +29,7 @@ defmodule Bonfire.Data.Social.FeedPublish do
     |> Changeset.validate_required(@required)
     |> Changeset.assoc_constraint(:feed)
     |> Changeset.assoc_constraint(:object)
+    |> Changeset.unique_constraint([:feed_id, :object_id])
   end
 
 end
