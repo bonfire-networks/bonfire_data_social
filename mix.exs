@@ -9,17 +9,17 @@ defmodule Bonfire.Data.Social.MixProject do
       elixir: "~> 1.10",
       start_permanent: Mix.env() == :prod,
       description: "Interactions and relationships between users",
-      homepage_url: "https://github.com/bonfire-ecosystem/bonfire_data_social",
-      source_url: "https://github.com/bonfire-ecosystem/bonfire_data_social",
+      homepage_url: "https://github.com/bonfire-networks/bonfire_data_social",
+      source_url: "https://github.com/bonfire-networks/bonfire_data_social",
       package: [
         licenses: ["MPL 2.0"],
         links: %{
-          "Repository" => "https://github.com/bonfire-ecosystem/bonfire_data_social",
+          "Repository" => "https://github.com/bonfire-networks/bonfire_data_social",
           "Hexdocs" => "https://hexdocs.pm/bonfire_data_social",
         },
       ],
       docs: [
-        main: "readme", # The first page to display from the docs 
+        main: "readme", # The first page to display from the docs
         extras: ["README.md"], # extra pages to include
       ],
       deps: Mess.deps [ {:ex_doc, ">= 0.0.0", only: :dev, runtime: false} ]
