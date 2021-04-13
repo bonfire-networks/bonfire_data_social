@@ -11,16 +11,13 @@ defmodule Bonfire.Data.Social.FeedPublish do
   alias Pointers.Pointer
 
   pointable_schema do
-    belongs_to :feed, Pointer
-    # belongs_to :timeline, Timeline, foreign_key: :object_id, define_field: false
+    belongs_to :feed, Feed
+    belongs_to :feed_pointer, Pointer, foreign_key: :feed_id, define_field: false
 
-    belongs_to :object, Pointer
-
-    # activity aliases object so we can associate them directly
-    belongs_to :activity, Activity, foreign_key: :object_id, define_field: false
+    belongs_to :activity, Activity
   end
 
-  @cast     [:feed_id, :object_id]
+  @cast     [:feed_id, :activity_id]
   @required @cast
 
   def changeset(pub \\ %FeedPublish{}, params) do
@@ -28,8 +25,8 @@ defmodule Bonfire.Data.Social.FeedPublish do
     |> Changeset.cast(params, @cast)
     |> Changeset.validate_required(@required)
     |> Changeset.assoc_constraint(:feed)
-    |> Changeset.assoc_constraint(:object)
-    |> Changeset.unique_constraint([:feed_id, :object_id])
+    |> Changeset.assoc_constraint(:activity)
+    |> Changeset.unique_constraint([:feed_id, :activity_id])
   end
 
 end
@@ -48,8 +45,8 @@ defmodule Bonfire.Data.Social.FeedPublish.Migration do
       require Pointers.Migration
       Pointers.Migration.create_pointable_table(Bonfire.Data.Social.FeedPublish) do
         Ecto.Migration.add :feed_id,
-          Pointers.Migration.strong_pointer(Bonfire.Data.Social.Feed), null: false
-        Ecto.Migration.add :object_id,
+          Pointers.Migration.strong_pointer(), null: false
+        Ecto.Migration.add :activity_id,
           Pointers.Migration.strong_pointer(), null: false
         unquote_splicing(exprs)
       end
@@ -79,21 +76,21 @@ defmodule Bonfire.Data.Social.FeedPublish.Migration do
   def drop_feed_publish_feed_index(opts \\ []),
     do: drop_if_exists(index(@feed_publish_table, [:feed_id], opts))
 
-  # create_feed_publish_object_index/{0,1}
+  # create_feed_publish_activity_index/{0,1}
 
-  defp make_feed_publish_object_index(opts) do
+  defp make_feed_publish_activity_index(opts) do
     quote do
       Ecto.Migration.create_if_not_exists(
-        Ecto.Migration.index(unquote(@feed_publish_table), [:object_id], unquote(opts))
+        Ecto.Migration.index(unquote(@feed_publish_table), [:activity_id], unquote(opts))
       )
     end
   end
 
-  defmacro create_feed_publish_object_index(opts \\ []),
-    do: make_feed_publish_object_index(opts)
+  defmacro create_feed_publish_activity_index(opts \\ []),
+    do: make_feed_publish_activity_index(opts)
 
-  def drop_feed_publish_object_index(opts \\ []),
-    do: drop_if_exists(index(@feed_publish_table, [:object_id], opts))
+  def drop_feed_publish_activity_index(opts \\ []),
+    do: drop_if_exists(index(@feed_publish_table, [:activity_id], opts))
 
   # migrate_feed/{0,1}
 
@@ -101,13 +98,13 @@ defmodule Bonfire.Data.Social.FeedPublish.Migration do
     quote do
       unquote(make_feed_publish_table([]))
       unquote(make_feed_publish_feed_index([]))
-      unquote(make_feed_publish_object_index([]))
+      unquote(make_feed_publish_activity_index([]))
     end
   end
 
   defp mf(:down) do
     quote do
-      Bonfire.Data.Social.FeedPublish.Migration.drop_feed_publish_object_index()
+      Bonfire.Data.Social.FeedPublish.Migration.drop_feed_publish_activity_index()
       Bonfire.Data.Social.FeedPublish.Migration.drop_feed_publish_feed_index()
       Bonfire.Data.Social.FeedPublish.Migration.drop_feed_publish_table()
     end

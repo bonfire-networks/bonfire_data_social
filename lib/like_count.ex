@@ -29,50 +29,50 @@ defmodule Bonfire.Data.Social.LikeCount.Migration do
   @trigger_table Bonfire.Data.Social.Like.__schema__(:source)
 
   @create_fun """
-create or replace function #{@table}_update ()
-returns trigger
-language plpgsql
- as $$
- declare
- begin
+  create or replace function #{@table}_update ()
+  returns trigger
+  language plpgsql
+  as $$
+  declare
+  begin
 
-     IF (TG_OP = 'INSERT') THEN
+      IF (TG_OP = 'INSERT') THEN
 
-         -- Increment the number of things the current liker likes
-         insert into #{@table}(id, like_count)
-             select NEW."liker_id", 1
-         on conflict (id)
-             do update
-                 set like_count = #{@table}.like_count + 1
-                 where #{@table}.id = NEW."liker_id";
+          -- Increment the number of things the current liker likes
+          insert into #{@table}(id, like_count)
+              select NEW."liker_id", 1
+          on conflict (id)
+              do update
+                  set like_count = #{@table}.like_count + 1
+                  where #{@table}.id = NEW."liker_id";
 
-         -- Increment the number of likers of the thing being liked
-         insert into #{@table}(id, liker_count)
-             select NEW."liked_id", 1
-         on conflict (id)
-             do update
-                 set liker_count = #{@table}.liker_count + 1
-                 where #{@table}.id = NEW."liked_id";
+          -- Increment the number of likers of the thing being liked
+          insert into #{@table}(id, liker_count)
+              select NEW."liked_id", 1
+          on conflict (id)
+              do update
+                  set liker_count = #{@table}.liker_count + 1
+                  where #{@table}.id = NEW."liked_id";
 
-         RETURN NULL;
+          RETURN NULL;
 
-     ELSIF (TG_OP = 'DELETE') THEN
+      ELSIF (TG_OP = 'DELETE') THEN
 
-         -- Decrement the number of things the current unliker likes
-         update #{@table}
-             set like_count = #{@table}.like_count - 1
-             where #{@table}.id = OLD."liker_id";
+          -- Decrement the number of things the current unliker likes
+          update #{@table}
+              set like_count = #{@table}.like_count - 1
+              where #{@table}.id = OLD."liker_id";
 
-         -- Decrement the number of likers of the thing being unliked
-         update #{@table}
-             set liker_count = #{@table}.liker_count - 1
-             where #{@table}.id = OLD."liked_id";
+          -- Decrement the number of likers of the thing being unliked
+          update #{@table}
+              set liker_count = #{@table}.liker_count - 1
+              where #{@table}.id = OLD."liked_id";
 
-         RETURN NULL;
+          RETURN NULL;
 
-     END IF;
- end;
- $$;
+      END IF;
+  end;
+  $$;
   """
 
   @create_trigger """

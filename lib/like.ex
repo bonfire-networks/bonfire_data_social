@@ -8,7 +8,7 @@ defmodule Bonfire.Data.Social.Like do
   require Pointers.Changesets
   alias Bonfire.Data.Social.Like
   alias Ecto.Changeset
-  alias Pointers.{Changesets, Pointer}
+  alias Pointers.Pointer
 
   pointable_schema do
     belongs_to :liker, Pointer

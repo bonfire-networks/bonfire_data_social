@@ -5,7 +5,7 @@ defmodule Bonfire.Data.Social.Inbox do
 
   alias Bonfire.Data.Social.{Inbox, Feed}
   alias Ecto.Changeset
-  alias Pointers.Pointer
+  # alias Pointers.Pointer
 
   mixin_schema do
     belongs_to :feed, Feed

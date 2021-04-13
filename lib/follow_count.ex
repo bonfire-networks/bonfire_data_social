@@ -29,50 +29,50 @@ defmodule Bonfire.Data.Social.FollowCount.Migration do
   @trigger_table Bonfire.Data.Social.Follow.__schema__(:source)
 
   @create_fun """
-create or replace function #{@table}_update ()
-returns trigger
-language plpgsql
- as $$
- declare
- begin
+  create or replace function #{@table}_update ()
+  returns trigger
+  language plpgsql
+  as $$
+  declare
+  begin
 
-     IF (TG_OP = 'INSERT') THEN
+      IF (TG_OP = 'INSERT') THEN
 
-         -- Increment the number of things the current follower follows
-         insert into #{@table}(id, follow_count)
-             select NEW."follower_id", 1
-         on conflict (id)
-             do update
-                 set follow_count = #{@table}.follow_count + 1
-                 where #{@table}.id = NEW."follower_id";
+          -- Increment the number of things the current follower follows
+          insert into #{@table}(id, follow_count)
+              select NEW."follower_id", 1
+          on conflict (id)
+              do update
+                  set follow_count = #{@table}.follow_count + 1
+                  where #{@table}.id = NEW."follower_id";
 
-         -- Increment the number of followers of the thing being followed
-         insert into #{@table}(id, follower_count)
-             select NEW."followed_id", 1
-         on conflict (id)
-             do update
-                 set follower_count = #{@table}.follower_count + 1
-                 where #{@table}.id = NEW."followed_id";
+          -- Increment the number of followers of the thing being followed
+          insert into #{@table}(id, follower_count)
+              select NEW."followed_id", 1
+          on conflict (id)
+              do update
+                  set follower_count = #{@table}.follower_count + 1
+                  where #{@table}.id = NEW."followed_id";
 
-         RETURN NULL;
+          RETURN NULL;
 
-     ELSIF (TG_OP = 'DELETE') THEN
+      ELSIF (TG_OP = 'DELETE') THEN
 
-         -- Decrement the number of things the current unfollower follows
-         update #{@table}
-             set follow_count = #{@table}.follow_count - 1
-             where #{@table}.id = OLD."follower_id";
+          -- Decrement the number of things the current unfollower follows
+          update #{@table}
+              set follow_count = #{@table}.follow_count - 1
+              where #{@table}.id = OLD."follower_id";
 
-         -- Decrement the number of followers of the thing being unfollowed
-         update #{@table}
-             set follower_count = #{@table}.follower_count - 1
-             where #{@table}.id = OLD."followed_id";
+          -- Decrement the number of followers of the thing being unfollowed
+          update #{@table}
+              set follower_count = #{@table}.follower_count - 1
+              where #{@table}.id = OLD."followed_id";
 
-         RETURN NULL;
+          RETURN NULL;
 
-     END IF;
- end;
- $$;
+      END IF;
+  end;
+  $$;
   """
 
   @create_trigger """

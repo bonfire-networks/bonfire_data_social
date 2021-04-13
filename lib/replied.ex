@@ -15,10 +15,10 @@ defmodule Bonfire.Data.Social.Replied do
     belongs_to :reply_to, Pointer
     belongs_to :thread, Pointer
 
-    @doc "Number of direct replies"
+    #doc "Number of direct replies"
     field :direct_replies_count, :integer, default: 0
 
-    @doc "Number of nested replies (note that the total number of replies is `direct_replies_count` + `nested_replies_count`)"
+    #doc "Number of nested replies (note that the total number of replies is `direct_replies_count` + `nested_replies_count`)"
     field :nested_replies_count, :integer, default: 0
 
     # field :depth, :integer, virtual: true
@@ -28,12 +28,19 @@ defmodule Bonfire.Data.Social.Replied do
   @cast [:reply_to_id, :thread_id]
   @required [:reply_to_id]
 
-  def changeset(replied \\ %Replied{}, %{reply_to: reply_to} = attrs) do
+  def changeset(replied \\ %Replied{}, attrs)
+
+  # for replies
+  def changeset(replied, %{reply_to: reply_to} = attrs) do
     replied
     |> Changeset.cast(attrs, @cast)
     |> Changeset.validate_required(@required)
     |> make_child_of(reply_to) # set tree path (powered by EctoMaterializedPath)
     |> Changeset.assoc_constraint(:reply_to)
+  end
+
+  def changeset(replied, %{reply_to_id: reply_to} = attrs) do
+    changeset(replied, attrs |> Map.merge(%{reply_to: reply_to})) # FIXME: this probably needs the struct
   end
 
   # for top-level posts
@@ -52,54 +59,54 @@ defmodule Bonfire.Data.Social.Replied.Migration do
   @trigger_table @table # counts in this case are stored in same table as data being counted
 
   @create_fun """
-create or replace function #{@table}_update ()
-returns trigger
-language plpgsql
- as $$
- declare
- begin
+  create or replace function #{@table}_update ()
+  returns trigger
+  language plpgsql
+  as $$
+  declare
+  begin
 
-     IF (TG_OP = 'INSERT') THEN
+      IF (TG_OP = 'INSERT') THEN
 
-         -- Increment the number of direct replies of the thing being replied to
-         update #{@table}
-            set direct_replies_count = #{@table}.direct_replies_count + 1
-            where #{@table}.id = NEW."reply_to_id";
+          -- Increment the number of direct replies of the thing being replied to
+          update #{@table}
+              set direct_replies_count = #{@table}.direct_replies_count + 1
+              where #{@table}.id = NEW."reply_to_id";
 
-         -- Increment the number of nested replies of the thread being replied to
-         update #{@table}
-            set nested_replies_count = #{@table}.nested_replies_count + 1
-            where #{@table}.id = NEW."thread_id" AND #{@table}.id != NEW."reply_to_id";
+          -- Increment the number of nested replies of the thread being replied to
+          update #{@table}
+              set nested_replies_count = #{@table}.nested_replies_count + 1
+              where #{@table}.id = NEW."thread_id" AND #{@table}.id != NEW."reply_to_id";
 
-         -- Increment the number of nested replies of each of the parents in the reply tree path, except when the path id is the same as NEW.id, or was already updated above
-         update #{@table}
-            set nested_replies_count = #{@table}.nested_replies_count + 1
-            where #{@table}.id = ANY(NEW."path") and #{@table}.id != NEW."id" and #{@table}.id != NEW."reply_to_id" and #{@table}.id != NEW."thread_id";
+          -- Increment the number of nested replies of each of the parents in the reply tree path, except when the path id is the same as NEW.id, or was already updated above
+          update #{@table}
+              set nested_replies_count = #{@table}.nested_replies_count + 1
+              where #{@table}.id = ANY(NEW."path") and #{@table}.id != NEW."id" and #{@table}.id != NEW."reply_to_id" and #{@table}.id != NEW."thread_id";
 
-        RETURN NULL;
+          RETURN NULL;
 
-     ELSIF (TG_OP = 'DELETE') THEN
+      ELSIF (TG_OP = 'DELETE') THEN
 
-         -- Decrement the number of replies of the thing being replied to
-         update #{@table}
-             set direct_replies_count = #{@table}.direct_replies_count - 1
-             where #{@table}.id = OLD."reply_to_id";
+          -- Decrement the number of replies of the thing being replied to
+          update #{@table}
+              set direct_replies_count = #{@table}.direct_replies_count - 1
+              where #{@table}.id = OLD."reply_to_id";
 
-         -- Decrement the number of nested replies of the thread being replied to
-         update #{@table}
-             set nested_replies_count = #{@table}.nested_replies_count - 1
-             where #{@table}.id = OLD."thread_id" and #{@table}.id != OLD."reply_to_id";
+          -- Decrement the number of nested replies of the thread being replied to
+          update #{@table}
+              set nested_replies_count = #{@table}.nested_replies_count - 1
+              where #{@table}.id = OLD."thread_id" and #{@table}.id != OLD."reply_to_id";
 
-         -- Decrement the number of nested replies of each of the parents in the reply tree path, except for the path ids that were already updated above
-         update #{@table}
-            set nested_replies_count = #{@table}.nested_replies_count - 1
-            where #{@table}.id = ANY(OLD."path") and #{@table}.id != OLD."reply_to_id" and #{@table}.id != OLD."thread_id";
+          -- Decrement the number of nested replies of each of the parents in the reply tree path, except for the path ids that were already updated above
+          update #{@table}
+              set nested_replies_count = #{@table}.nested_replies_count - 1
+              where #{@table}.id = ANY(OLD."path") and #{@table}.id != OLD."reply_to_id" and #{@table}.id != OLD."thread_id";
 
-         RETURN NULL;
+          RETURN NULL;
 
-     END IF;
- end;
- $$;
+      END IF;
+  end;
+  $$;
   """
 
   @create_trigger """

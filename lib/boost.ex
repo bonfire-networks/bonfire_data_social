@@ -8,7 +8,7 @@ defmodule Bonfire.Data.Social.Boost do
   require Pointers.Changesets
   alias Bonfire.Data.Social.Boost
   alias Ecto.Changeset
-  alias Pointers.{Changesets, Pointer}
+  alias Pointers.Pointer
 
   pointable_schema do
     belongs_to :booster, Pointer

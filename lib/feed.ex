@@ -9,7 +9,7 @@ defmodule Bonfire.Data.Social.Feed do
   alias Bonfire.Data.Social.Feed
   alias Bonfire.Data.Social.FeedPublish
   alias Ecto.Changeset
-  alias Pointers.Pointer
+  # alias Pointers.Pointer
 
   pointable_schema do
     has_many :feed_publishes, FeedPublish, references: :id
@@ -22,7 +22,7 @@ defmodule Bonfire.Data.Social.Feed do
 end
 defmodule Bonfire.Data.Social.Feed.Migration do
 
-  import Ecto.Migration
+  # import Ecto.Migration
   import Pointers.Migration
   alias Bonfire.Data.Social.Feed
 
