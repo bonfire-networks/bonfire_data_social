@@ -34,14 +34,14 @@ defmodule Bonfire.Data.Social.Replied do
   def changeset(replied, %{reply_to: reply_to} = attrs) do
     replied
     |> Changeset.cast(attrs, @cast)
-    |> Changeset.validate_required(@required)
+    # |> Changeset.validate_required(@required)
     |> make_child_of(reply_to) # set tree path (powered by EctoMaterializedPath)
     |> Changeset.assoc_constraint(:reply_to)
   end
 
-  def changeset(replied, %{reply_to_id: reply_to} = attrs) do
-    changeset(replied, attrs |> Map.merge(%{reply_to: reply_to})) # FIXME: this probably needs the struct
-  end
+  # def changeset(replied, %{reply_to_id: reply_to} = attrs) do
+  #   changeset(replied, attrs |> Map.merge(%{reply_to: reply_to})) # FIXME: this probably needs the struct
+  # end
 
   # for top-level posts
   def changeset(replied, attrs) do
