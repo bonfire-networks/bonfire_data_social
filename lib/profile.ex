@@ -12,11 +12,11 @@ defmodule Bonfire.Data.Social.Profile do
     field :summary, :string
     field :website, :string
     field :location, :string
-    # belongs_to :icon, Content
-    # belongs_to :image, Content
+    belongs_to :icon, Bonfire.Files.Media
+    belongs_to :image, Bonfire.Files.Media
   end
 
-  @cast     [:name, :summary, :website, :location]
+  @cast     [:name, :summary, :website, :location, :icon_id, :image_id]
   @required [:name]
 
   def changeset(profile \\ %Profile{}, params) do
@@ -41,8 +41,8 @@ defmodule Bonfire.Data.Social.Profile.Migration do
         Ecto.Migration.add :summary, :text
         Ecto.Migration.add :website, :text
         Ecto.Migration.add :location, :text
-        # Ecto.Migration.add :icon, strong_pointer(Content)
-        # Ecto.Migration.add :image, strong_pointer(Content)
+        Ecto.Migration.add :icon_id, strong_pointer(Bonfire.Files.Media)
+        Ecto.Migration.add :image_id, strong_pointer(Bonfire.Files.Media)
         unquote_splicing(exprs)
       end
     end
