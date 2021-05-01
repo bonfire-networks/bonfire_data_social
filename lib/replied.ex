@@ -25,7 +25,7 @@ defmodule Bonfire.Data.Social.Replied do
     field :path, EctoMaterializedPath.ULIDs, default: [] # default is important here
   end
 
-  @cast [:reply_to_id, :thread_id]
+  @cast [:id, :reply_to_id, :thread_id]
   @required [:reply_to_id]
 
   def changeset(replied \\ %Replied{}, attrs)
