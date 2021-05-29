@@ -2,7 +2,7 @@ defmodule Bonfire.Data.Social.Boost do
 
   use Pointers.Pointable,
     otp_app: :bonfire_data_social,
-    table_id: "B00STANN0VNCERESHARESH0VTS",
+    table_id: "300STANN0VNCERESHARESH0VTS",
     source: "bonfire_data_social_boost"
 
   require Pointers.Changesets

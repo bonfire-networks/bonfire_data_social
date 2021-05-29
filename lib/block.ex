@@ -2,14 +2,14 @@ defmodule Bonfire.Data.Social.Block do
 
   use Pointers.Pointable,
     otp_app: :bonfire_data_social,
-    table_id: "B10CK1NGSTVFFAV01DSSEE1NG1",
+    table_id: "310CK1NGSTVFFAV01DSSEE1NG1",
     source: "bonfire_data_social_block"
 
   require Pointers.Changesets
   alias Bonfire.Data.Social.Block
   alias Ecto.Changeset
   alias Pointers.Pointer
-  
+
   pointable_schema do
     belongs_to :blocker, Pointer
     belongs_to :blocked, Pointer

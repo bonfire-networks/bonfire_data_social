@@ -2,14 +2,14 @@ defmodule Bonfire.Data.Social.Mention do
 
   use Pointers.Pointable,
     otp_app: :bonfire_data_social,
-    table_id: "REFERENCEST0S0MEP01NTAB1EX",
+    table_id: "0EFERENCEST0S0MEP01NTAB1EX",
     source: "bonfire_data_social_mention"
 
   require Pointers.Changesets
   alias Bonfire.Data.Social.Mention
   alias Ecto.Changeset
   alias Pointers.Pointer
-  
+
   pointable_schema do
     belongs_to :mentioner, Pointer
     belongs_to :mentioned, Pointer

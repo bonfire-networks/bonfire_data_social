@@ -4,7 +4,7 @@ defmodule Bonfire.Data.Social.Circle do
 
   use Pointers.Pointable,
     otp_app: :bonfire_data_social,
-    table_id: "C1RC1ESAREAV1S1B111TYSC0PE",
+    table_id: "41RC1ESAREAV1S1B111TYSC0PE",
     source: "bonfire_data_social_circle"
 
   alias Bonfire.Data.Social.{Circle, Encircle}

@@ -2,14 +2,14 @@ defmodule Bonfire.Data.Social.Bookmark do
 
   use Pointers.Pointable,
     otp_app: :bonfire_data_social,
-    table_id: "REMEMBERS0METH1NGSF0R1ATER",
+    table_id: "0EMEMBERS0METH1NGSF0R1ATER",
     source: "bonfire_data_social_bookmark"
 
   require Pointers.Changesets
   alias Bonfire.Data.Social.Bookmark
   alias Ecto.Changeset
   alias Pointers.Pointer
-  
+
   pointable_schema do
     belongs_to :bookmarker, Pointer
     belongs_to :bookmarked, Pointer

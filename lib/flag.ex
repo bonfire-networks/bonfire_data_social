@@ -2,7 +2,7 @@ defmodule Bonfire.Data.Social.Flag do
 
   use Pointers.Pointable,
     otp_app: :bonfire_data_social,
-    table_id: "F1AGSPAM0RVNACCEPTAB1E1TEM",
+    table_id: "71AGSPAM0RVNACCEPTAB1E1TEM",
     source: "bonfire_data_social_flag"
 
   require Pointers.Changesets

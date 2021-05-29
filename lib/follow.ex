@@ -2,7 +2,7 @@ defmodule Bonfire.Data.Social.Follow do
 
   use Pointers.Pointable,
     otp_app: :bonfire_data_social,
-    table_id: "F0110WTHE1EADER1EADER1EADE",
+    table_id: "70110WTHE1EADER1EADER1EADE",
     source: "bonfire_data_social_follow"
 
   require Pointers.Changesets
