@@ -15,10 +15,6 @@ defmodule Bonfire.Data.Social.Follow do
     belongs_to :followed, Pointer
   end
 
-  def context_module() do
-    Keyword.get(Application.get_env(:bonfire_data_social, :context_modules), :follow, nil)
-  end
-
   @cast     [:follower_id, :followed_id]
   @required @cast
 
