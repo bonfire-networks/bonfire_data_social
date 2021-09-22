@@ -16,7 +16,7 @@ defmodule Bonfire.Data.Social.APActivity do
 
   def changeset(activity \\ %APActivity{}, params) do
     activity
-    |> Changeset.cast(@cast)
+    |> Changeset.cast(params, @cast)
     |> Changeset.validate_required(@required)
   end
 end
