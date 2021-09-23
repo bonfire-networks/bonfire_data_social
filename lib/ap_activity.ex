@@ -30,6 +30,7 @@ defmodule Bonfire.Data.Social.APActivity.Migration do
     quote do
       require Pointers.Migration
       Pointers.Migration.create_pointable_table(Bonfire.Data.Social.APActivity) do
+        Ecto.Migration.add :json, :jsonb
         unquote_splicing(exprs)
       end
     end
