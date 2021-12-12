@@ -1,4 +1,3 @@
-Code.eval_file("mess.exs")
 defmodule Bonfire.Data.Social.MixProject do
   use Mix.Project
 
@@ -22,10 +21,17 @@ defmodule Bonfire.Data.Social.MixProject do
         main: "readme", # The first page to display from the docs
         extras: ["README.md"], # extra pages to include
       ],
-      deps: Mess.deps [ {:ex_doc, ">= 0.0.0", only: :dev, runtime: false} ]
+      deps: deps()
     ]
   end
 
   def application, do: [extra_applications: [:logger]]
+
+  defp deps do
+    [
+      {:pointers, [env: :prod, git: "https://github.com/bonfire-networks/pointers", branch: "main", override: true]},
+      {:ecto_materialized_path, [env: :prod, git: "https://github.com/bonfire-networks/ecto_materialized_path", branch: "master", override: true]}
+    ]
+  end
 
 end

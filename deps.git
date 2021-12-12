@@ -1,2 +1,0 @@
-# arbor = "https://github.com/mayel/arbor" # for tree queries
-ecto_materialized_path = "https://github.com/bonfire-networks/ecto_materialized_path"
