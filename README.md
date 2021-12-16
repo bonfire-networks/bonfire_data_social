@@ -1,6 +1,8 @@
+# Bonfire.Data.Social
+
 <!-- [hex](https://hex.pm/bonfire_data_social) [hexdocs](https://hexdocs.pm/bonfire_data_social) -->
 
-# bonfire\_data\_social
+Schemas for social activities, posts, feeds, etc
 
 ## Copyright and License
 
