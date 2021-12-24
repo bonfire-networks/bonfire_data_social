@@ -56,56 +56,34 @@ defmodule Bonfire.Data.Social.FeedPublish.Migration do
   defmacro create_feed_publish_table(), do: make_feed_publish_table([])
   defmacro create_feed_publish_table([do: {_, _, body}]), do: make_feed_publish_table(body)
 
-  # drop_feed_publish_table/0
-
   def drop_feed_publish_table(), do: drop_pointable_table(FeedPublish)
 
-  # create_feed_publish_feed_index/{0,1}
 
-  defp make_feed_publish_feed_index(opts) do
-    quote do
-      Ecto.Migration.create_if_not_exists(
-        Ecto.Migration.index(unquote(@feed_publish_table), [:feed_id], unquote(opts))
-      )
-    end
-  end
-
-  defmacro create_feed_publish_feed_index(opts \\ []),
-    do: make_feed_publish_feed_index(opts)
-
-  def drop_feed_publish_feed_index(opts \\ []),
+  def migrate_feed_publish_feed_index(dir \\ direction(), opts \\ [])
+  def migrate_feed_publish_feed_index(:up, opts),
+    do: create_if_not_exists(index(@feed_publish_table, [:feed_id], opts))
+  def migrate_feed_publish_feed_index(:down, opts),
     do: drop_if_exists(index(@feed_publish_table, [:feed_id], opts))
 
-  # create_feed_publish_activity_index/{0,1}
-
-  defp make_feed_publish_activity_index(opts) do
-    quote do
-      Ecto.Migration.create_if_not_exists(
-        Ecto.Migration.index(unquote(@feed_publish_table), [:activity_id], unquote(opts))
-      )
-    end
-  end
-
-  defmacro create_feed_publish_activity_index(opts \\ []),
-    do: make_feed_publish_activity_index(opts)
-
-  def drop_feed_publish_activity_index(opts \\ []),
+  def migrate_feed_publish_activity_index(dir \\ direction(), opts \\ [])
+  def migrate_feed_publish_activity_index(:up, opts),
+    do: create_if_not_exists(index(@feed_publish_table, [:activity_id], opts))
+  def migrate_feed_publish_activity_index(:down, opts),
     do: drop_if_exists(index(@feed_publish_table, [:activity_id], opts))
 
-  # migrate_feed/{0,1}
 
   defp mf(:up) do
     quote do
-      unquote(make_feed_publish_table([]))
-      unquote(make_feed_publish_feed_index([]))
-      unquote(make_feed_publish_activity_index([]))
+      Bonfire.Data.Social.FeedPublish.Migration.create_feed_publish_table()
+      Bonfire.Data.Social.FeedPublish.Migration.migrate_feed_publish_feed_index()
+      Bonfire.Data.Social.FeedPublish.Migration.migrate_feed_publish_activity_index()
     end
   end
 
   defp mf(:down) do
     quote do
-      Bonfire.Data.Social.FeedPublish.Migration.drop_feed_publish_activity_index()
-      Bonfire.Data.Social.FeedPublish.Migration.drop_feed_publish_feed_index()
+      Bonfire.Data.Social.FeedPublish.Migration.migrate_feed_publish_activity_index()
+      Bonfire.Data.Social.FeedPublish.Migration.migrate_feed_publish_feed_index()
       Bonfire.Data.Social.FeedPublish.Migration.drop_feed_publish_table()
     end
   end

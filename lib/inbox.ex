@@ -1,4 +1,4 @@
-defmodule Bonfire.Data.Social.Inbox do
+ defmodule Bonfire.Data.Social.Inbox do
   use Pointers.Mixin,
     otp_app: :bonfire_data_social,
     source: "bonfire_data_social_inbox"
@@ -48,9 +48,9 @@ defmodule Bonfire.Data.Social.Inbox.Migration do
 
   # migrate_inbox/{0, 1}
 
-  defp mcd(:up), do: make_inbox_table([])
+  defp mi(:up), do: make_inbox_table([])
 
-  defp mcd(:down) do
+  defp mi(:down) do
     quote do
       Bonfire.Data.Social.Inbox.Migration.drop_inbox_table()
     end
@@ -59,11 +59,11 @@ defmodule Bonfire.Data.Social.Inbox.Migration do
   defmacro migrate_inbox() do
     quote do
       if Ecto.Migration.direction() == :up,
-        do: unquote(mcd(:up)),
-        else: unquote(mcd(:down))
+        do: unquote(mi(:up)),
+        else: unquote(mi(:down))
     end
   end
 
-  defmacro migrate_inbox(dir), do: mcd(dir)
+  defmacro migrate_inbox(dir), do: mi(dir)
 
 end
