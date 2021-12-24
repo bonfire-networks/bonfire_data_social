@@ -57,54 +57,34 @@ defmodule Bonfire.Data.Social.Encircle.Migration do
   defmacro create_encircle_table(), do: make_encircle_table([])
   defmacro create_encircle_table([do: {_, _, body}]), do: make_encircle_table(body)
 
-  # drop_encircle_table/0
-
   def drop_encircle_table(), do: drop_pointable_table(Encircle)
 
-  # create_encircle_unique_index/{0,1}
 
-  defp make_encircle_unique_index(opts) do
-    quote do
-      Ecto.Migration.create_if_not_exists(
-        Ecto.Migration.unique_index(unquote(@encircle_table), unquote(@unique_index), unquote(opts))
-      )
-    end
-  end
+  def migrate_encircle_unique_index(dir \\ direction(), opts \\ [])
+  def migrate_encircle_unique_index(:up, opts),
+    do: create_if_not_exists(index(@encircle_table, @unique_index, opts))
+  def migrate_encircle_unique_index(:down, opts),
+    do: drop_if_exists(index(@encircle_table, @unique_index, opts))
 
-  defmacro create_encircle_unique_index(opts \\ [])
-  defmacro create_encircle_unique_index(opts), do: make_encircle_unique_index(opts)
+  def migrate_encircle_circle_index(dir \\ direction(), opts \\ [])
+  def migrate_encircle_circle_index(:up, opts),
+    do: create_if_not_exists(index(@encircle_table, [:circle_id], opts))
+  def migrate_encircle_circle_index(:down, opts),
+    do: drop_if_exists(index(@encircle_table, [:circle_id], opts))
 
-  def drop_encircle_unique_index(opts \\ [])
-  def drop_encircle_unique_index(opts), do: drop_if_exists(unique_index(@encircle_table, @unique_index, opts))
-
-  defp make_encircle_circle_index(opts) do
-    quote do
-      Ecto.Migration.create_if_not_exists(
-        Ecto.Migration.index(unquote(@encircle_table), [:circle_id], unquote(opts))
-      )
-    end
-  end
-
-  defmacro create_encircle_circle_index(opts \\ [])
-  defmacro create_encircle_circle_index(opts), do: make_encircle_circle_index(opts)
-
-  def drop_encircle_circle_index(opts \\ [])
-  def drop_encircle_circle_index(opts), do: drop_if_exists(index(@encircle_table, [:circle_id], opts))
-
-  # migrate_encircle/{0,1}
 
   defp me(:up) do
     quote do
-      unquote(make_encircle_table([]))
-      unquote(make_encircle_unique_index([]))
-      unquote(make_encircle_circle_index([]))
+      Bonfire.Data.Social.Encircle.Migration.create_encircle_table()
+      Bonfire.Data.Social.Encircle.Migration.migrate_encircle_unique_index()
+      Bonfire.Data.Social.Encircle.Migration.migrate_encircle_circle_index()
     end
   end
 
   defp me(:down) do
     quote do
-      Bonfire.Data.Social.Encircle.Migration.drop_encircle_circle_index()
-      Bonfire.Data.Social.Encircle.Migration.drop_encircle_unique_index()
+      Bonfire.Data.Social.Encircle.Migration.migrate_encircle_circle_index()
+      Bonfire.Data.Social.Encircle.Migration.migrate_encircle_unique_index()
       Bonfire.Data.Social.Encircle.Migration.drop_encircle_table()
     end
   end
