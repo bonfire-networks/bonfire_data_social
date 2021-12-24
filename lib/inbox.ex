@@ -3,12 +3,12 @@
     otp_app: :bonfire_data_social,
     source: "bonfire_data_social_inbox"
 
-  alias Bonfire.Data.Social.{Inbox, Feed}
+  alias Bonfire.Data.Social.Inbox
   alias Ecto.Changeset
   # alias Pointers.Pointer
 
   mixin_schema do
-    belongs_to :feed, Feed
+    belongs_to :feed, Pointer
   end
 
   @cast [:feed_id, :id]
@@ -33,7 +33,7 @@ defmodule Bonfire.Data.Social.Inbox.Migration do
     quote do
       require Pointers.Migration
       Pointers.Migration.create_mixin_table(Bonfire.Data.Social.Inbox) do
-        Ecto.Migration.add :feed_id, Pointers.Migration.strong_pointer(Feed)
+        Ecto.Migration.add :feed_id, Pointers.Migration.strong_pointer()
         unquote_splicing(exprs)
       end
     end

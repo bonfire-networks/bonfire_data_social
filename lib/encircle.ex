@@ -13,7 +13,7 @@ defmodule Bonfire.Data.Social.Encircle do
 
   pointable_schema do
     belongs_to :subject, Pointer
-    belongs_to :circle, Circle
+    belongs_to :circle, Pointer
   end
 
   @cast     [:subject_id, :circle_id]
@@ -48,7 +48,7 @@ defmodule Bonfire.Data.Social.Encircle.Migration do
         Ecto.Migration.add :subject_id,
           Pointers.Migration.strong_pointer()
         Ecto.Migration.add :circle_id,
-          Pointers.Migration.strong_pointer(Bonfire.Data.Social.Circle)
+          Pointers.Migration.strong_pointer()
         unquote_splicing(exprs)
       end
     end
