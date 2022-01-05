@@ -19,7 +19,23 @@ defmodule Bonfire.Data.Social.Flag.Migration do
 
   import Pointers.Migration
   alias Bonfire.Data.Social.Flag
+  import Bonfire.Data.Edges.Edge.Migration
+  import Bonfire.Data.Edges.EdgeTotal.Migration
 
-  def migrate_flag(), do: migrate_virtual(Flag)
+  def migrate_flag_view(), do: migrate_virtual(Flag)
+
+  def migrate_flag_unique_index(), do: migrate_type_unique_index(Flag)
+
+  def migrate_flag(dir \\ direction())
+
+  def migrate_flag(:up) do
+    migrate_flag_view()
+    migrate_flag_unique_index()
+  end
+
+  def migrate_flag(:down) do
+    migrate_flag_unique_index()
+    migrate_flag_view()
+  end
 
 end

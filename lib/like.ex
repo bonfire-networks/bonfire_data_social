@@ -23,19 +23,24 @@ defmodule Bonfire.Data.Social.Like.Migration do
   import Pointers.Migration
   alias Bonfire.Data.Social.Like
   import Bonfire.Data.Edges.Edge.Migration
+  import Bonfire.Data.Edges.EdgeTotal.Migration
 
   def migrate_like_view(), do: migrate_virtual(Like)
 
   def migrate_like_unique_index(), do: migrate_type_unique_index(Like)
+
+  def migrate_like_total_view(), do: migrate_edge_total_view(Like)
 
   def migrate_like(dir \\ direction())
 
   def migrate_like(:up) do
     migrate_like_view()
     migrate_like_unique_index()
+    migrate_like_total_view()
   end
 
   def migrate_like(:down) do
+    migrate_like_total_view()
     migrate_like_unique_index()
     migrate_like_view()
   end

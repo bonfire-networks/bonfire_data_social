@@ -20,7 +20,23 @@ defmodule Bonfire.Data.Social.Boost.Migration do
 
   import Pointers.Migration
   alias Bonfire.Data.Social.Boost
+  import Bonfire.Data.Edges.Edge.Migration
+  import Bonfire.Data.Edges.EdgeTotal.Migration
 
-  def migrate_boost(), do: migrate_virtual(Boost)
+  def migrate_boost_view(), do: migrate_virtual(Boost)
+
+  def migrate_boost_total_view(), do: migrate_edge_total_view(Boost)
+
+  def migrate_boost(dir \\ direction())
+
+  def migrate_boost(:up) do
+    migrate_boost_view()
+    migrate_boost_total_view()
+  end
+
+  def migrate_boost(:down) do
+    migrate_boost_total_view()
+    migrate_boost_view()
+  end
 
 end
