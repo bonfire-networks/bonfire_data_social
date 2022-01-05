@@ -26,14 +26,18 @@ defmodule Bonfire.Data.Social.Follow.Migration do
 
   def migrate_follow_unique_index(), do: migrate_type_unique_index(Follow)
 
+  def migrate_follow_total_view(), do: migrate_edge_total_view(Follow)
+
   def migrate_follow(dir \\ direction())
 
   def migrate_follow(:up) do
     migrate_follow_view()
     migrate_follow_unique_index()
+    migrate_follow_total_view()
   end
 
   def migrate_follow(:down) do
+    migrate_follow_total_view()
     migrate_follow_unique_index()
     migrate_follow_view()
   end
