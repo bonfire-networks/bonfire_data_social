@@ -17,6 +17,7 @@ defmodule Bonfire.Data.Social.Flag do
 end
 defmodule Bonfire.Data.Social.Flag.Migration do
 
+  import Ecto.Migration
   import Pointers.Migration
   alias Bonfire.Data.Social.Flag
   import Bonfire.Data.Edges.Edge.Migration
