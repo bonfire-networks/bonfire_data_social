@@ -21,9 +21,9 @@ defmodule Bonfire.Data.Social.Like.Migration do
 
   import Ecto.Migration
   import Pointers.Migration
-  alias Bonfire.Data.Social.Like
   import Bonfire.Data.Edges.Edge.Migration
   import Bonfire.Data.Edges.EdgeTotal.Migration
+  alias Bonfire.Data.Social.Like
 
   def migrate_like_view(), do: migrate_virtual(Like)
 

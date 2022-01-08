@@ -18,10 +18,11 @@ defmodule Bonfire.Data.Social.Boost do
 end
 defmodule Bonfire.Data.Social.Boost.Migration do
 
+  import Ecto.Migration
   import Pointers.Migration
-  alias Bonfire.Data.Social.Boost
   import Bonfire.Data.Edges.Edge.Migration
   import Bonfire.Data.Edges.EdgeTotal.Migration
+  alias Bonfire.Data.Social.Boost
 
   def migrate_boost_view(), do: migrate_virtual(Boost)
 

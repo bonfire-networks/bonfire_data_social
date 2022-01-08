@@ -19,8 +19,8 @@ defmodule Bonfire.Data.Social.Block.Migration do
 
   import Ecto.Migration
   import Pointers.Migration
-  alias Bonfire.Data.Social.Block
   import Bonfire.Data.Edges.Edge.Migration
+  alias Bonfire.Data.Social.Block
 
   def migrate_block_view(), do: migrate_virtual(Block)
 

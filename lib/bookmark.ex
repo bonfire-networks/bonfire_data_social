@@ -20,10 +20,11 @@ defmodule Bonfire.Data.Social.Bookmark do
 end
 defmodule Bonfire.Data.Social.Bookmark.Migration do
 
+  import Ecto.Migration
   import Pointers.Migration
-  alias Bonfire.Data.Social.Bookmark
   import Bonfire.Data.Edges.Edge.Migration
   import Bonfire.Data.Edges.EdgeTotal.Migration
+  alias Bonfire.Data.Social.Bookmark
 
   def migrate_bookmark_view(), do: migrate_virtual(Bookmark)
 
