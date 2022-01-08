@@ -19,8 +19,9 @@ defmodule Bonfire.Data.Social.Follow.Migration do
 
   import Ecto.Migration
   import Pointers.Migration
-  alias Bonfire.Data.Social.Follow
   import Bonfire.Data.Edges.Edge.Migration
+  import Bonfire.Data.Edges.EdgeTotal.Migration
+  alias Bonfire.Data.Social.Follow
 
   def migrate_follow_view(), do: migrate_virtual(Follow)
 
