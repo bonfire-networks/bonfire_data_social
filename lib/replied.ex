@@ -39,6 +39,10 @@ defmodule Bonfire.Data.Social.Replied do
     |> Changeset.assoc_constraint(:reply_to)
   end
 
+  def changeset(replied, %{replying_to: reply_to} = attrs) do
+    changeset(replied, Map.merge(attrs, %{reply_to: reply_to}))
+  end
+
   # def changeset(replied, %{reply_to_id: reply_to} = attrs) do
   #   changeset(replied, attrs |> Map.merge(%{reply_to: reply_to})) # FIXME: this probably needs the struct
   # end
