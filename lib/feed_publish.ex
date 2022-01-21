@@ -12,21 +12,18 @@ defmodule Bonfire.Data.Social.FeedPublish do
 
   pointable_schema do
     belongs_to :feed, Pointer
-    belongs_to :feed_pointer, Pointer, foreign_key: :feed_id, define_field: false
-
     belongs_to :activity, Activity
   end
 
   @cast     [:feed_id, :activity_id]
-  @required @cast
-
+  @required [:feed_id]  # so we can cast_assoc from activity
   def changeset(pub \\ %FeedPublish{}, params) do
     pub
     |> Changeset.cast(params, @cast)
     |> Changeset.validate_required(@required)
     |> Changeset.assoc_constraint(:feed)
     |> Changeset.assoc_constraint(:activity)
-    |> Changeset.unique_constraint([:feed_id, :activity_id])
+    |> Changeset.unique_constraint(@cast)
   end
 
 end
