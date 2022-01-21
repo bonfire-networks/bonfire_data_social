@@ -3,21 +3,20 @@
     otp_app: :bonfire_data_social,
     source: "bonfire_data_social_inbox"
 
-  alias Bonfire.Data.Social.Inbox
+  alias Bonfire.Data.Social.{Feed, Inbox}
   alias Ecto.Changeset
-  # alias Pointers.Pointer
+  alias Pointers.Pointer
 
   mixin_schema do
-    belongs_to :feed, Pointer
+    belongs_to :feed, Feed
   end
 
   @cast [:feed_id, :id]
-  @required [:feed_id]
 
   def changeset(inbox \\ %Inbox{}, attrs) do
     inbox
     |> Changeset.cast(attrs, @cast)
-    |> Changeset.validate_required(@required)
+    |> Changeset.cast_assoc(:feed)
     |> Changeset.assoc_constraint(:feed)
   end
 end

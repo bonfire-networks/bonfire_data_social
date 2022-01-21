@@ -8,6 +8,7 @@ defmodule Bonfire.Data.Social.Activity do
   alias Bonfire.Data.Social.Activity
   alias Ecto.Changeset
   alias Pointers.Pointer
+  import Bonfire.Common.Utils, only: [debug: 2]
 
   pointable_schema do
     belongs_to :subject, Pointer
@@ -15,9 +16,12 @@ defmodule Bonfire.Data.Social.Activity do
     belongs_to :verb, Verb
   end
 
-  @cast     [:subject_id, :object_id, :verb_id]
-  @required [:subject_id, :object_id, :verb_id]
+  @cast     [:id, :subject_id, :object_id, :verb_id]
+  @required [:subject_id, :verb_id] # so we can cast_assoc from object
 
+  # note: this is intended to be called by Bonfire.Social.Activities
+  # which casts the appropriate data into the parent changeset before
+  # calling.
   def changeset(activity \\ %Activity{}, params) do
     activity
     |> Changeset.cast(params, @cast)
@@ -25,7 +29,8 @@ defmodule Bonfire.Data.Social.Activity do
     |> Changeset.assoc_constraint(:subject)
     |> Changeset.assoc_constraint(:object)
     |> Changeset.assoc_constraint(:verb)
-    |> Changeset.unique_constraint([:subject_id, :verb_id, :object_id])
+    |> Changeset.cast_assoc(:feed_publishes)
+    |> Changeset.unique_constraint(@cast)
   end
 
 end
