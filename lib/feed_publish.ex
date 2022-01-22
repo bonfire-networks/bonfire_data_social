@@ -8,10 +8,9 @@ defmodule Bonfire.Data.Social.FeedPublish do
   require Pointers.Changesets
   alias Bonfire.Data.Social.{Feed, FeedPublish, Activity}
   alias Ecto.Changeset
-  alias Pointers.Pointer
 
   pointable_schema do
-    belongs_to :feed, Pointer
+    belongs_to :feed, Feed
     belongs_to :activity, Activity
   end
 
@@ -44,7 +43,7 @@ defmodule Bonfire.Data.Social.FeedPublish.Migration do
         Ecto.Migration.add :feed_id,
           Pointers.Migration.strong_pointer(), null: false
         Ecto.Migration.add :activity_id,
-          Pointers.Migration.strong_pointer(), null: false
+          Pointers.Migration.strong_pointer(Bonfire.Data.Social.Activity), null: false
         unquote_splicing(exprs)
       end
     end
