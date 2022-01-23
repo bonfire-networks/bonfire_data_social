@@ -13,8 +13,15 @@ defmodule Bonfire.Data.Social.Like do
   virtual_schema do
   end
 
+  def changeset(like \\ %Like{}, params)
 
-  def changeset(like \\ %Like{}, params), do: Changeset.cast(like, params, [])
+  def changeset(like, %{edge: edge}), do:
+    like
+    |> Changeset.cast(%{edge: Map.merge(edge, %{table_id: "11KES11KET0BE11KEDY0VKN0WS"})}, [])
+
+  def changeset(like, params), do:
+    like
+    |> Changeset.cast(params, [])
 
 end
 defmodule Bonfire.Data.Social.Like.Migration do

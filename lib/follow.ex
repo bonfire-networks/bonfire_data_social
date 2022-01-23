@@ -12,7 +12,15 @@ defmodule Bonfire.Data.Social.Follow do
   virtual_schema do
   end
 
-  def changeset(follow \\ %Follow{}, params), do: Changeset.cast(follow, params, [])
+  def changeset(follow \\ %Follow{}, params)
+
+  def changeset(follow, %{edge: edge}), do:
+    follow
+    |> Changeset.cast(%{edge: Map.merge(edge, %{table_id: "70110WTHE1EADER1EADER1EADE"})}, [])
+
+  def changeset(follow, params), do:
+    follow
+    |> Changeset.cast(params, [])
 
 end
 defmodule Bonfire.Data.Social.Follow.Migration do
