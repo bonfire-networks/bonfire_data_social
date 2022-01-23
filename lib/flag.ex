@@ -12,7 +12,15 @@ defmodule Bonfire.Data.Social.Flag do
   virtual_schema do
   end
 
-  def changeset(flag \\ %Flag{}, params), do: Changeset.cast(flag, params, [])
+  def changeset(flag \\ %Flag{}, params)
+
+  def changeset(flag, %{edge: edge}), do:
+    flag
+    |> Changeset.cast(%{edge: Map.merge(edge, %{table_id: "71AGSPAM0RVNACCEPTAB1E1TEM"})}, [])
+
+  def changeset(flag, params), do:
+    flag
+    |> Changeset.cast(params, [])
 
 end
 defmodule Bonfire.Data.Social.Flag.Migration do

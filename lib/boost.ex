@@ -13,7 +13,15 @@ defmodule Bonfire.Data.Social.Boost do
   virtual_schema do
   end
 
-  def changeset(boost \\ %Boost{}, params), do: Changeset.cast(boost, params, [])
+  def changeset(boost \\ %Boost{}, params)
+
+  def changeset(boost, %{edge: edge}), do:
+    boost
+    |> Changeset.cast(%{edge: Map.merge(edge, %{table_id: "300STANN0VNCERESHARESH0VTS"})}, [])
+
+  def changeset(boost, params), do:
+    boost
+    |> Changeset.cast(params, [])
 
 end
 defmodule Bonfire.Data.Social.Boost.Migration do

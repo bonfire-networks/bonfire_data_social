@@ -12,10 +12,15 @@ defmodule Bonfire.Data.Social.Bookmark do
   virtual_schema do
   end
 
-  def changeset(bookmark \\ %Bookmark{}, params) do
+  def changeset(bookmark \\ %Bookmark{}, params)
+
+  def changeset(bookmark, %{edge: edge}), do:
+    bookmark
+    |> Changeset.cast(%{edge: Map.merge(edge, %{table_id: "0EMEMBERS0METH1NGSF0R1ATER"})}, [])
+
+  def changeset(bookmark, params), do:
     bookmark
     |> Changeset.cast(params, [])
-  end
 
 end
 defmodule Bonfire.Data.Social.Bookmark.Migration do
