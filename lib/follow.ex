@@ -6,21 +6,26 @@ defmodule Bonfire.Data.Social.Follow do
     source: "bonfire_data_social_follow"
 
   require Pointers.Changesets
+  alias Bonfire.Data.AccessControl.Controlled
   alias Bonfire.Data.Social.Follow
+  alias Bonfire.Edges.Edge
   alias Ecto.Changeset
 
   virtual_schema do
+    has_one :caretaker, Caretaker, foreign_key: :id
+    has_one :edge, Edge, foreign_key: :id
+    has_many :controlled, Controlled, foreign_key: :id, references: :id
   end
 
   def changeset(follow \\ %Follow{}, params)
 
-  def changeset(follow, %{edge: edge}), do:
-    follow
-    |> Changeset.cast(%{edge: Map.merge(edge, %{table_id: "70110WTHE1EADER1EADER1EADE"})}, [])
-
-  def changeset(follow, params), do:
+  def changeset(follow, params) do
+    # edge needs this to enforce uniqueness. we don't expect it to be nil.
+    params = Map.update(params, :edge, nil, %{table_id: "70110WTHE1EADER1EADER1EADE"})
     follow
     |> Changeset.cast(params, [])
+    |> Changeset.cast_assoc(:controlled)
+  end
 
 end
 defmodule Bonfire.Data.Social.Follow.Migration do
