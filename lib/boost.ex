@@ -7,10 +7,12 @@ defmodule Bonfire.Data.Social.Boost do
 
   require Pointers.Changesets
   alias Bonfire.Data.Social.Boost
+  alias Bonfire.Data.Edges.Edge
   alias Ecto.Changeset
   alias Pointers.Pointer
 
   virtual_schema do
+    has_one :edge, Edge, foreign_key: :id
   end
 
   def changeset(boost \\ %Boost{}, params)

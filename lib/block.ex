@@ -7,12 +7,22 @@ defmodule Bonfire.Data.Social.Block do
 
   require Pointers.Changesets
   alias Bonfire.Data.Social.Block
+  alias Bonfire.Data.Edges.Edge
   alias Ecto.Changeset
 
   virtual_schema do
+    has_one :edge, Edge, foreign_key: :id
   end
 
-  def changeset(block \\ %Block{}, params), do: Changeset.cast(block, params, [])
+  def changeset(block \\ %Block{}, params)
+
+  def changeset(block, %{edge: edge}), do:
+    block
+    |> Changeset.cast(%{edge: Map.merge(edge, %{table_id: "310CK1NGSTVFFAV01DSSEE1NG1"})}, [])
+
+  def changeset(block, params), do:
+    block
+    |> Changeset.cast(params, [])
 
 end
 defmodule Bonfire.Data.Social.Block.Migration do
