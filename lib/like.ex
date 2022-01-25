@@ -7,10 +7,12 @@ defmodule Bonfire.Data.Social.Like do
 
   require Pointers.Changesets
   alias Bonfire.Data.Social.Like
+  alias Bonfire.Data.Edges.Edge
   alias Ecto.Changeset
   alias Pointers.Pointer
 
   virtual_schema do
+    has_one :edge, Edge, foreign_key: :id
   end
 
   def changeset(like \\ %Like{}, params)

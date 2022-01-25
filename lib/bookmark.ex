@@ -6,10 +6,12 @@ defmodule Bonfire.Data.Social.Bookmark do
     source: "bonfire_data_social_bookmark"
 
   alias Bonfire.Data.Social.Bookmark
+  alias Bonfire.Data.Edges.Edge
   alias Ecto.Changeset
   alias Pointers.Pointer
 
   virtual_schema do
+    has_one :edge, Edge, foreign_key: :id
   end
 
   def changeset(bookmark \\ %Bookmark{}, params)

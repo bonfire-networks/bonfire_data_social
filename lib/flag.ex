@@ -7,9 +7,11 @@ defmodule Bonfire.Data.Social.Flag do
 
   require Pointers.Changesets
   alias Bonfire.Data.Social.Flag
+  alias Bonfire.Data.Edges.Edge
   alias Ecto.Changeset
 
   virtual_schema do
+    has_one :edge, Edge, foreign_key: :id
   end
 
   def changeset(flag \\ %Flag{}, params)
