@@ -14,15 +14,12 @@ defmodule Bonfire.Data.Social.Flag do
     has_one :edge, Edge, foreign_key: :id
   end
 
-  def changeset(flag \\ %Flag{}, params)
-
-  def changeset(flag, %{edge: edge}), do:
-    flag
-    |> Changeset.cast(%{edge: Map.merge(edge, %{table_id: "71AGSPAM0RVNACCEPTAB1E1TEM"})}, [])
-
-  def changeset(flag, params), do:
+  def changeset(flag \\ %Flag{}, params) do
+    # edge needs this to enforce uniqueness. we don't expect it to be nil.
+    params = Map.update(params, :edge, nil, &Map.put(&1, :table_id, "71AGSPAM0RVNACCEPTAB1E1TEM"))
     flag
     |> Changeset.cast(params, [])
+  end
 
 end
 defmodule Bonfire.Data.Social.Flag.Migration do
