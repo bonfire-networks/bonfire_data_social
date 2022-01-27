@@ -66,7 +66,7 @@ defmodule Bonfire.Data.Social.Replied.Migration do
   @table Replied.__schema__(:source)
   @trigger_table @table # counts in this case are stored in same table as data being counted
 
-  @create_fun """
+  def create_fun, do: """
   create or replace function #{@table}_update ()
   returns trigger
   language plpgsql
@@ -117,7 +117,7 @@ defmodule Bonfire.Data.Social.Replied.Migration do
   $$;
   """
 
-  @create_trigger """
+  def create_trigger, do: """
   create trigger #{@table}_trigger
   AFTER INSERT OR DELETE
       ON #{@trigger_table}
@@ -130,9 +130,9 @@ defmodule Bonfire.Data.Social.Replied.Migration do
 
   def migrate_functions do
     # this has the appearance of being muddled, but it's not
-    Ecto.Migration.execute(@create_fun, @drop_fun)
+    Ecto.Migration.execute(create_fun, @drop_fun)
     Ecto.Migration.execute(@drop_trigger, @drop_trigger) # to replace if changed
-    Ecto.Migration.execute(@create_trigger, @drop_trigger)
+    Ecto.Migration.execute(create_trigger, @drop_trigger)
   end
 
   # create_replied_table/{0, 1}
