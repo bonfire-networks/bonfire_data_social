@@ -167,12 +167,12 @@ defmodule Bonfire.Data.Social.Replied.Migration do
   defp mcd(:up) do
     make_replied_table([])
     # Ecto.Migration.flush()
-    # migrate_functions()
+    # migrate_functions() # put this in your app's migration instead
   end
 
   defp mcd(:down) do
     quote do
-      # Bonfire.Data.Social.Replied.Migration.migrate_functions()
+      Bonfire.Data.Social.Replied.Migration.migrate_functions()
       Bonfire.Data.Social.Replied.Migration.drop_replied_table()
     end
   end
