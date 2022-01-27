@@ -5,7 +5,8 @@ defmodule Bonfire.Data.Social.Replied do
 
   # to query trees:
   use EctoMaterializedPath
-  # use Arbor.Tree, primary_key: :id , primary_key_type: Pointers.ULID, foreign_key: :reply_to_id, foreign_key_type: Pointers.ULID
+
+  require Logger
 
   alias Bonfire.Data.Social.Replied
   alias Ecto.Changeset
@@ -31,24 +32,27 @@ defmodule Bonfire.Data.Social.Replied do
   def changeset(replied \\ %Replied{}, attrs)
 
   # for replies
-  def changeset(replied, %{reply_to: reply_to} = attrs) do
+  def changeset(replied, %{reply_to: %{replied: %{id: _} = replied_to}} = attrs) do
+    changeset(replied, Map.put(attrs, :reply_to, replied_to)) # EctoMaterializedPath needs the Replied struct
+  end
+
+  def changeset(replied, %{reply_to: %Replied{id: reply_to_id} = replied_to} = attrs) do
+    Logger.debug("Replied - recording reply_to #{inspect reply_to_id} in thread #{inspect attrs[:thread_id]}")
     replied
-    |> Changeset.cast(attrs, @cast)
     # |> Changeset.validate_required(@required)
-    |> make_child_of(reply_to) # set tree path (powered by EctoMaterializedPath)
+    |> Changeset.cast(Map.put(attrs, :reply_to_id, reply_to_id), @cast)
     |> Changeset.assoc_constraint(:reply_to)
+    |> make_child_of(replied_to) # set tree path (powered by EctoMaterializedPath)
   end
 
-  def changeset(replied, %{replying_to: reply_to} = attrs) do
-    changeset(replied, Map.merge(attrs, %{reply_to: reply_to}))
+  def changeset(_replied, %{reply_to_id: reply_to_id} = attrs) when not is_nil(reply_to_id) do
+    Logger.error("Replied: you must pass the struct of the object being replied to, an ID is not enough, got: #{inspect attrs}")
+    raise "Could not record the reply."
   end
 
-  # def changeset(replied, %{reply_to_id: reply_to} = attrs) do
-  #   changeset(replied, attrs |> Map.merge(%{reply_to: reply_to})) # FIXME: this probably needs the struct
-  # end
-
-  # for top-level posts
+  # for top-level posts only
   def changeset(replied, attrs) do
+    Logger.debug("Replied - recording a top level post")
     replied
     |> Changeset.cast(attrs, @cast)
   end
