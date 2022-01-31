@@ -8,7 +8,7 @@ defmodule Bonfire.Data.Social.Activity do
   alias Bonfire.Data.Social.Activity
   alias Ecto.Changeset
   alias Pointers.Pointer
-  # import Bonfire.Common.Utils, only: [debug: 2]
+  # use Bonfire.Common.Utils, only: [debug: 2]
 
   pointable_schema do
     belongs_to :subject, Pointer
