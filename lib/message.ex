@@ -1,4 +1,5 @@
 defmodule Bonfire.Data.Social.Message do
+
   use Pointers.Pointable,
     otp_app: :bonfire_data_social,
     table_id: "6R1VATEMESAGEC0MMVN1CAT10N",
