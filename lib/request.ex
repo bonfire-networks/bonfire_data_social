@@ -20,12 +20,7 @@ defmodule Bonfire.Data.Social.Request do
   @cast [:id, :accepted_at, :ignored_at]
 
   def changeset(request \\ %Request{}, params)
-
-  def changeset(request, params) do
-    params # edge needs this to enforce uniqueness. we don't expect it to be nil.
-    |> Map.update(:edge, nil, &Map.put(&1, :table_id, __pointers__(:table_id)))
-    |> Changeset.cast(request, ..., [])
-  end
+  def changeset(request, params), do: Changeset.cast(request, params, @cast)
 
 end
 defmodule Bonfire.Data.Social.Request.Migration do
