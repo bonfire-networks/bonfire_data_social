@@ -6,7 +6,7 @@ defmodule Bonfire.Data.Social.Replied do
   # to query trees:
   use EctoMaterializedPath
 
-  require Logger
+  import Where
 
   alias Bonfire.Data.Social.Replied
   alias Ecto.Changeset
@@ -37,7 +37,7 @@ defmodule Bonfire.Data.Social.Replied do
   end
 
   def changeset(replied, %{reply_to: %Replied{id: reply_to_id} = replied_to} = attrs) do
-    Logger.debug("Replied - recording reply_to #{inspect reply_to_id} in thread #{inspect attrs[:thread_id]}")
+    debug("Replied - recording reply_to #{inspect reply_to_id} in thread #{inspect attrs[:thread_id]}")
     replied
     # |> Changeset.validate_required(@required)
     |> Changeset.cast(Map.put(attrs, :reply_to_id, reply_to_id), @cast)
@@ -46,13 +46,13 @@ defmodule Bonfire.Data.Social.Replied do
   end
 
   def changeset(_replied, %{reply_to_id: reply_to_id} = attrs) when not is_nil(reply_to_id) do
-    Logger.error("Replied: you must pass the struct of the object being replied to, an ID is not enough, got: #{inspect attrs}")
+    error("Replied: you must pass the struct of the object being replied to, an ID is not enough, got: #{inspect attrs}")
     raise "Could not record the reply."
   end
 
   # for top-level posts only
   def changeset(replied, attrs) do
-    Logger.debug("Replied - recording a top level post")
+    debug("Replied - recording a top level post")
     replied
     |> Changeset.cast(attrs, @cast)
   end
