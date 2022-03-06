@@ -1,7 +1,8 @@
 defmodule Bonfire.Data.Social.Activity do
-  use Pointers.Pointable,
+
+  use Pointers.Mixin,
     otp_app: :bonfire_data_social,
-    table_id: "1TSASVBJECTVERB1NGAN0BJECT",
+    # table_id: "1TSASVBJECTVERB1NGAN0BJECT",
     source: "bonfire_data_social_activity"
 
   alias Bonfire.Data.AccessControl.Verb
@@ -10,7 +11,7 @@ defmodule Bonfire.Data.Social.Activity do
   alias Pointers.Pointer
   # use Bonfire.Common.Utils, only: [debug: 2]
 
-  pointable_schema do
+  mixin_schema do
     belongs_to :subject, Pointer
     belongs_to :object, Pointer
     belongs_to :verb, Verb
@@ -47,7 +48,7 @@ defmodule Bonfire.Data.Social.Activity.Migration do
   defp make_activity_table(exprs) do
     quote do
       require Pointers.Migration
-      Pointers.Migration.create_pointable_table(Bonfire.Data.Social.Activity) do
+      Pointers.Migration.create_mixin_table(Bonfire.Data.Social.Activity) do
         Ecto.Migration.add :subject_id,
           Pointers.Migration.strong_pointer(), null: false
         Ecto.Migration.add :object_id,
@@ -64,7 +65,7 @@ defmodule Bonfire.Data.Social.Activity.Migration do
 
   # drop_activity_table/0
 
-  def drop_activity_table(), do: drop_pointable_table(Activity)
+  def drop_activity_table(), do: drop_mixin_table(Activity)
 
   # create_activity_unique_index/{0,1}
 
