@@ -5,10 +5,10 @@ defmodule Bonfire.Data.Social.Follow do
     table_id: "70110WTHE1EADER1EADER1EADE",
     source: "bonfire_data_social_follow"
 
-  require Pointers.Changesets
   alias Bonfire.Data.Social.Follow
   alias Bonfire.Data.Edges.Edge
   alias Ecto.Changeset
+  alias Pointers.Changesets
 
   virtual_schema do
     has_one :edge, Edge, foreign_key: :id
@@ -17,10 +17,10 @@ defmodule Bonfire.Data.Social.Follow do
   def changeset(follow \\ %Follow{}, params)
 
   def changeset(follow, params) do
-    # edge needs this to enforce uniqueness. we don't expect it to be nil.
-    params = Map.update(params, :edge, nil, &Map.put(&1, :table_id, "70110WTHE1EADER1EADER1EADE"))
     follow
-    |> Changeset.cast(params, [])
+    |> Changesets.cast(params, [])
+    |> Changeset.put_assoc(:edge, %{table_id: __pointers__(:table_id)})
+    |> Changeset.cast_assoc(:edge)
   end
 
 end

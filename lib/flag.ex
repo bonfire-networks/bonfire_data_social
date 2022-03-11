@@ -5,20 +5,20 @@ defmodule Bonfire.Data.Social.Flag do
     table_id: "71AGSPAM0RVNACCEPTAB1E1TEM",
     source: "bonfire_data_social_flag"
 
-  require Pointers.Changesets
   alias Bonfire.Data.Social.Flag
   alias Bonfire.Data.Edges.Edge
   alias Ecto.Changeset
+  alias Pointers.Changesets
 
   virtual_schema do
     has_one :edge, Edge, foreign_key: :id
   end
 
   def changeset(flag \\ %Flag{}, params) do
-    # edge needs this to enforce uniqueness. we don't expect it to be nil.
-    params = Map.update(params, :edge, nil, &Map.put(&1, :table_id, "71AGSPAM0RVNACCEPTAB1E1TEM"))
     flag
-    |> Changeset.cast(params, [])
+    |> Changesets.cast(params, [])
+    |> Changeset.put_assoc(:edge, %{table_id: __pointers__(:table_id)})
+    |> Changeset.cast_assoc(:edge)
   end
 
 end

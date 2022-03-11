@@ -9,6 +9,7 @@ defmodule Bonfire.Data.Social.Bookmark do
   alias Bonfire.Data.Edges.Edge
   alias Ecto.Changeset
   alias Pointers.Pointer
+  alias Pointers.Changesets
 
   virtual_schema do
     has_one :edge, Edge, foreign_key: :id
@@ -16,13 +17,12 @@ defmodule Bonfire.Data.Social.Bookmark do
 
   def changeset(bookmark \\ %Bookmark{}, params)
 
-  def changeset(bookmark, %{edge: edge}), do:
+  def changeset(bookmark, params) do
     bookmark
-    |> Changeset.cast(%{edge: Map.merge(edge, %{table_id: "0EMEMBERS0METH1NGSF0R1ATER"})}, [])
-
-  def changeset(bookmark, params), do:
-    bookmark
-    |> Changeset.cast(params, [])
+    |> Changesets.cast(params, [])
+    |> Changeset.put_assoc(:edge, %{table_id: __pointers__(:table_id)})
+    |> Changeset.cast_assoc(:edge)
+  end
 
 end
 defmodule Bonfire.Data.Social.Bookmark.Migration do

@@ -5,7 +5,7 @@ defmodule Bonfire.Data.Social.Like do
     table_id: "11KES11KET0BE11KEDY0VKN0WS",
     source: "bonfire_data_social_like"
 
-  require Pointers.Changesets
+  alias Pointers.Changesets
   alias Bonfire.Data.Social.Like
   alias Bonfire.Data.Edges.Edge
   alias Ecto.Changeset
@@ -17,13 +17,11 @@ defmodule Bonfire.Data.Social.Like do
 
   def changeset(like \\ %Like{}, params)
 
-  def changeset(like, %{edge: edge}), do:
+  def changeset(like, params) do
     like
-    |> Changeset.cast(%{edge: Map.merge(edge, %{table_id: "11KES11KET0BE11KEDY0VKN0WS"})}, [])
-
-  def changeset(like, params), do:
-    like
-    |> Changeset.cast(params, [])
+    |> Changeset.put_assoc(:edge, %{table_id: __pointers__(:table_id)})
+    |> Changeset.cast_assoc(:edge)
+  end
 
 end
 defmodule Bonfire.Data.Social.Like.Migration do

@@ -5,19 +5,16 @@ defmodule Bonfire.Data.Social.Feed do
     table_id: "1TFEEDS0NTHES0V1S0FM0RTA1S",
     source: "bonfire_data_social_feed"
 
-  require Pointers.Changesets
   alias Bonfire.Data.Social.Feed
   alias Bonfire.Data.Social.FeedPublish
   alias Ecto.Changeset
-  # alias Pointers.Pointer
+  alias Pointers.Changesets
 
   virtual_schema do
-    has_many :feed_publishes, FeedPublish, references: :id
+    has_many :feed_publishes, FeedPublish, references: :id, foreign_key: :id
   end
 
-  def changeset(feed \\ %Feed{}, params) do
-    Changeset.cast(feed, params, [:id])
-  end
+  def changeset(feed \\ %Feed{}, params), do: Changesets.cast(feed, params, [])
 
 end
 defmodule Bonfire.Data.Social.Feed.Migration do

@@ -6,13 +6,13 @@ defmodule Bonfire.Data.Social.Message do
     source: "bonfire_data_social_message"
 
   alias Bonfire.Data.Social.Message
-  alias Ecto.Changeset
+  alias Pointers.Changesets
 
   pointable_schema do
   end
 
   def changeset(message \\ %Message{}, params) do
-    Changeset.cast(message, params, [])
+    Changesets.cast(message, params, [])
   end
 
 end

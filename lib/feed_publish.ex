@@ -1,27 +1,24 @@
 defmodule Bonfire.Data.Social.FeedPublish do
 
-  use Pointers.Pointable,
+  use Pointers.Mixin,
     otp_app: :bonfire_data_social,
-    table_id: "6VTT1NGS0METH1NGS1NT0AFEED",
     source: "bonfire_data_social_feed_publish"
 
   require Pointers.Changesets
   alias Bonfire.Data.Social.{Feed, FeedPublish, Activity}
   alias Ecto.Changeset
 
-  pointable_schema do
+  mixin_schema do
     belongs_to :feed, Feed
-    belongs_to :activity, Activity
   end
 
-  @cast     [:feed_id, :activity_id]
-  @required [:feed_id]  # so we can cast_assoc from activity
+  @cast     [:id, :feed_id]
+  @required [:id, :feed_id]
   def changeset(pub \\ %FeedPublish{}, params) do
     pub
     |> Changeset.cast(params, @cast)
     |> Changeset.validate_required(@required)
     |> Changeset.assoc_constraint(:feed)
-    |> Changeset.assoc_constraint(:activity)
     |> Changeset.unique_constraint(@cast)
   end
 
@@ -39,11 +36,9 @@ defmodule Bonfire.Data.Social.FeedPublish.Migration do
   defp make_feed_publish_table(exprs) do
     quote do
       require Pointers.Migration
-      Pointers.Migration.create_pointable_table(Bonfire.Data.Social.FeedPublish) do
+      Pointers.Migration.create_mixin_table(Bonfire.Data.Social.FeedPublish) do
         Ecto.Migration.add :feed_id,
-          Pointers.Migration.strong_pointer(), null: false
-        Ecto.Migration.add :activity_id,
-          Pointers.Migration.strong_pointer(Bonfire.Data.Social.Activity), null: false
+          Pointers.Migration.strong_pointer(), primary_key: true
         unquote_splicing(exprs)
       end
     end
@@ -61,24 +56,15 @@ defmodule Bonfire.Data.Social.FeedPublish.Migration do
   def migrate_feed_publish_feed_index(:down, opts),
     do: drop_if_exists(index(@feed_publish_table, [:feed_id], opts))
 
-  def migrate_feed_publish_activity_index(dir \\ direction(), opts \\ [])
-  def migrate_feed_publish_activity_index(:up, opts),
-    do: create_if_not_exists(index(@feed_publish_table, [:activity_id], opts))
-  def migrate_feed_publish_activity_index(:down, opts),
-    do: drop_if_exists(index(@feed_publish_table, [:activity_id], opts))
-
-
   defp mf(:up) do
     quote do
       Bonfire.Data.Social.FeedPublish.Migration.create_feed_publish_table()
       Bonfire.Data.Social.FeedPublish.Migration.migrate_feed_publish_feed_index()
-      Bonfire.Data.Social.FeedPublish.Migration.migrate_feed_publish_activity_index()
     end
   end
 
   defp mf(:down) do
     quote do
-      Bonfire.Data.Social.FeedPublish.Migration.migrate_feed_publish_activity_index()
       Bonfire.Data.Social.FeedPublish.Migration.migrate_feed_publish_feed_index()
       Bonfire.Data.Social.FeedPublish.Migration.drop_feed_publish_table()
     end

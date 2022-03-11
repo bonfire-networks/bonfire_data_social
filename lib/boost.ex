@@ -5,11 +5,11 @@ defmodule Bonfire.Data.Social.Boost do
     table_id: "300STANN0VNCERESHARESH0VTS",
     source: "bonfire_data_social_boost"
 
-  require Pointers.Changesets
   alias Bonfire.Data.Social.Boost
   alias Bonfire.Data.Edges.Edge
   alias Ecto.Changeset
   alias Pointers.Pointer
+  alias Pointers.Changesets
 
   virtual_schema do
     has_one :edge, Edge, foreign_key: :id
@@ -17,13 +17,12 @@ defmodule Bonfire.Data.Social.Boost do
 
   def changeset(boost \\ %Boost{}, params)
 
-  def changeset(boost, %{edge: edge}), do:
+  def changeset(boost, params) do
     boost
-    |> Changeset.cast(%{edge: Map.merge(edge, %{table_id: "300STANN0VNCERESHARESH0VTS"})}, [])
-
-  def changeset(boost, params), do:
-    boost
-    |> Changeset.cast(params, [])
+    |> Changesets.cast(params, [])
+    |> Changeset.put_assoc(:edge, %{table_id: __pointers__(:table_id)})
+    |> Changeset.cast_assoc(:edge)
+  end
 
 end
 defmodule Bonfire.Data.Social.Boost.Migration do

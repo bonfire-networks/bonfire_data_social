@@ -17,7 +17,7 @@ defmodule Bonfire.Data.Social.Activity do
     belongs_to :verb, Verb
   end
 
-  @cast     [:id, :subject_id, :object_id, :verb_id]
+  @cast     [:subject_id, :object_id, :verb_id]
   @required [:subject_id, :verb_id] # so we can cast_assoc from object
 
   # note: this is intended to be called by Bonfire.Social.Activities
@@ -52,7 +52,7 @@ defmodule Bonfire.Data.Social.Activity.Migration do
         Ecto.Migration.add :subject_id,
           Pointers.Migration.strong_pointer(), null: false
         Ecto.Migration.add :object_id,
-          Pointers.Migration.strong_pointer(), null: false
+          Pointers.Migration.strong_pointer(), null: true
         Ecto.Migration.add :verb_id,
           Pointers.Migration.strong_pointer(Bonfire.Data.AccessControl.Verb), null: false
         unquote_splicing(exprs)

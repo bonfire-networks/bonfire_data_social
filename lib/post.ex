@@ -6,14 +6,12 @@ defmodule Bonfire.Data.Social.Post do
     source: "bonfire_data_social_post"
 
   alias Bonfire.Data.Social.Post
-  alias Ecto.Changeset
+  alias Pointers.Changesets
 
   virtual_schema do
   end
 
-  def changeset(post \\ %Post{}, params) do
-    Changeset.cast(post, params, [])
-  end
+  def changeset(post \\ %Post{}, params), do: Changesets.cast(post, params, [])
 
 end
 
