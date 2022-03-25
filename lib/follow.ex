@@ -5,23 +5,15 @@ defmodule Bonfire.Data.Social.Follow do
     table_id: "70110WTHE1EADER1EADER1EADE",
     source: "bonfire_data_social_follow"
 
-  alias Bonfire.Data.Social.Follow
   alias Bonfire.Data.Edges.Edge
-  alias Ecto.Changeset
+  alias Bonfire.Data.Social.Follow
   alias Pointers.Changesets
 
   virtual_schema do
     has_one :edge, Edge, foreign_key: :id
   end
 
-  def changeset(follow \\ %Follow{}, params)
-
-  def changeset(follow, params) do
-    follow
-    |> Changesets.cast(params, [])
-    |> Changeset.put_assoc(:edge, %{table_id: __pointers__(:table_id)})
-    |> Changeset.cast_assoc(:edge)
-  end
+  def changeset(follow \\ %Follow{}, params), do: Changesets.cast(follow, params, [])
 
 end
 defmodule Bonfire.Data.Social.Follow.Migration do

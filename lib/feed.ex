@@ -11,7 +11,7 @@ defmodule Bonfire.Data.Social.Feed do
   alias Pointers.Changesets
 
   virtual_schema do
-    has_many :feed_publishes, FeedPublish, references: :id, foreign_key: :id
+    has_many :feed_publishes, FeedPublish, references: :id, foreign_key: :feed_id
   end
 
   def changeset(feed \\ %Feed{}, params), do: Changesets.cast(feed, params, [])

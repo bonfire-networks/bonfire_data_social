@@ -7,6 +7,7 @@ defmodule Bonfire.Data.Social.APActivity do
 
   alias Bonfire.Data.Social.APActivity
   alias Ecto.Changeset
+  alias Pointers.Changesets
 
   pointable_schema do
     field :json, :map
@@ -17,11 +18,10 @@ defmodule Bonfire.Data.Social.APActivity do
 
   def changeset(activity \\ %APActivity{}, params) do
     activity
-    |> Changeset.cast(params, @cast)
+    |> Changesets.cast(params, @cast)
     |> Changeset.validate_required(@required)
   end
 end
-
 defmodule Bonfire.Data.Social.APActivity.Migration do
   use Ecto.Migration
   import Pointers.Migration
@@ -54,5 +54,5 @@ defmodule Bonfire.Data.Social.APActivity.Migration do
         else: unquote(maa(:down))
     end
   end
-  defmacro migrate_post(dir), do: maa(dir)
+  defmacro migrate_apactivity(dir), do: maa(dir)
 end

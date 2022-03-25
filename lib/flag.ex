@@ -5,21 +5,15 @@ defmodule Bonfire.Data.Social.Flag do
     table_id: "71AGSPAM0RVNACCEPTAB1E1TEM",
     source: "bonfire_data_social_flag"
 
-  alias Bonfire.Data.Social.Flag
   alias Bonfire.Data.Edges.Edge
-  alias Ecto.Changeset
+  alias Bonfire.Data.Social.Flag
   alias Pointers.Changesets
 
   virtual_schema do
     has_one :edge, Edge, foreign_key: :id
   end
 
-  def changeset(flag \\ %Flag{}, params) do
-    flag
-    |> Changesets.cast(params, [])
-    |> Changeset.put_assoc(:edge, %{table_id: __pointers__(:table_id)})
-    |> Changeset.cast_assoc(:edge)
-  end
+  def changeset(flag \\ %Flag{}, params), do: Changesets.cast(flag, params, [])
 
 end
 defmodule Bonfire.Data.Social.Flag.Migration do

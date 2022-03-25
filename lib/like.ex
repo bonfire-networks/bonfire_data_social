@@ -5,23 +5,15 @@ defmodule Bonfire.Data.Social.Like do
     table_id: "11KES11KET0BE11KEDY0VKN0WS",
     source: "bonfire_data_social_like"
 
-  alias Pointers.Changesets
-  alias Bonfire.Data.Social.Like
   alias Bonfire.Data.Edges.Edge
-  alias Ecto.Changeset
-  alias Pointers.Pointer
+  alias Bonfire.Data.Social.Like
+  alias Pointers.Changesets
 
   virtual_schema do
     has_one :edge, Edge, foreign_key: :id
   end
 
-  def changeset(like \\ %Like{}, params)
-
-  def changeset(like, params) do
-    like
-    |> Changeset.put_assoc(:edge, %{table_id: __pointers__(:table_id)})
-    |> Changeset.cast_assoc(:edge)
-  end
+  def changeset(like \\ %Like{}, params), do: Changesets.cast(like, params, [])
 
 end
 defmodule Bonfire.Data.Social.Like.Migration do

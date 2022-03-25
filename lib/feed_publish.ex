@@ -1,19 +1,27 @@
 defmodule Bonfire.Data.Social.FeedPublish do
+  @moduledoc """
+  A multimixin for an object appearing in a feed.
+
+  A quite interesting thing about this model is that feed_id
+  references Pointer, so it isn't only things of type Feed that it can
+  appear in, they are just an obvious choice.
+  """
 
   use Pointers.Mixin,
     otp_app: :bonfire_data_social,
     source: "bonfire_data_social_feed_publish"
 
   require Pointers.Changesets
-  alias Bonfire.Data.Social.{Feed, FeedPublish, Activity}
+  alias Pointers.Pointer
+  alias Bonfire.Data.Social.FeedPublish
   alias Ecto.Changeset
 
   mixin_schema do
-    belongs_to :feed, Feed
+    belongs_to :feed, Pointer, primary_key: true
   end
 
-  @cast     [:id, :feed_id]
-  @required [:id, :feed_id]
+  @cast     [:feed_id]
+  @required [:feed_id]
   def changeset(pub \\ %FeedPublish{}, params) do
     pub
     |> Changeset.cast(params, @cast)

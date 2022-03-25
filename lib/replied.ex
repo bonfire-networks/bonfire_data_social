@@ -15,18 +15,13 @@ defmodule Bonfire.Data.Social.Replied do
   mixin_schema do
     belongs_to :reply_to, Pointer
     belongs_to :thread, Pointer
-
-    #doc "Number of direct replies"
+    # Kept updated by triggers. Total replies = direct replies + nested replies. 
     field :direct_replies_count, :integer, default: 0
-
-    #doc "Number of nested replies (note that the total number of replies is `direct_replies_count` + `nested_replies_count`)"
     field :nested_replies_count, :integer, default: 0
-
-    # field :depth, :integer, virtual: true
     field :path, EctoMaterializedPath.ULIDs, default: [] # default is important here
   end
 
-  @cast [:id, :reply_to_id, :thread_id]
+  @cast [:reply_to_id, :thread_id]
   @required [:reply_to_id]
 
   def changeset(replied \\ %Replied{}, attrs)
@@ -67,66 +62,61 @@ defmodule Bonfire.Data.Social.Replied.Migration do
   @trigger_table @table # counts in this case are stored in same table as data being counted
 
   def create_fun, do: """
-  create or replace function #{@table}_update ()
+  create or replace function "#{@table}_update" ()
   returns trigger
   language plpgsql
   as $$
   declare
   begin
-
-      IF (TG_OP = 'INSERT') THEN
-
-          -- Increment the number of direct replies of the thing being replied to
-          update #{@table}
-              set direct_replies_count = #{@table}.direct_replies_count + 1
-              where #{@table}.id = NEW."reply_to_id";
-
-          -- Increment the number of nested replies of the thread being replied to
-          update #{@table}
-              set nested_replies_count = #{@table}.nested_replies_count + 1
-              where #{@table}.id = NEW."thread_id" AND #{@table}.id != NEW."reply_to_id";
-
-          -- Increment the number of nested replies of each of the parents in the reply tree path, except when the path id is the same as NEW.id, or was already updated above
-          update #{@table}
-              set nested_replies_count = #{@table}.nested_replies_count + 1
-              where #{@table}.id = ANY(NEW."path") and #{@table}.id != NEW."id" and #{@table}.id != NEW."reply_to_id" and #{@table}.id != NEW."thread_id";
-
-          RETURN NULL;
-
-      ELSIF (TG_OP = 'DELETE') THEN
-
-          -- Decrement the number of replies of the thing being replied to
-          update #{@table}
-              set direct_replies_count = #{@table}.direct_replies_count - 1
-              where #{@table}.id = OLD."reply_to_id";
-
-          -- Decrement the number of nested replies of the thread being replied to
-          update #{@table}
-              set nested_replies_count = #{@table}.nested_replies_count - 1
-              where #{@table}.id = OLD."thread_id" and #{@table}.id != OLD."reply_to_id";
-
-          -- Decrement the number of nested replies of each of the parents in the reply tree path, except for the path ids that were already updated above
-          update #{@table}
-              set nested_replies_count = #{@table}.nested_replies_count - 1
-              where #{@table}.id = ANY(OLD."path") and #{@table}.id != OLD."reply_to_id" and #{@table}.id != OLD."thread_id";
-
-          RETURN NULL;
-
-      END IF;
+    if (TG_OP = 'INSERT') then
+      -- Increment the number of direct replies of the thing being replied to
+      update "#{@table}"
+        set direct_replies_count = direct_replies_count + 1
+        where id = NEW.reply_to_id;
+      -- Increment the number of nested replies of the thread being replied to
+      update "#{@table}"
+        set nested_replies_count = nested_replies_count + 1
+        where id  = NEW.thread_id
+          and id != NEW.reply_to_id;
+      -- Increment the number of nested replies of each of the parents in the reply tree path,
+      -- except when the path id is the same as NEW.id, or was already updated above
+      update "#{@table}"
+        set nested_replies_count = nested_replies_count + 1
+        where id  = ANY(NEW.path)
+          and id != NEW.id
+          and id != NEW.reply_to_id
+          and id != NEW.thread_id;
+      return NULL;
+    elsif (TG_OP = 'DELETE') then
+      -- Decrement the number of replies of the thing being replied to
+      update "#{@table}"
+        set direct_replies_count = direct_replies_count - 1
+        where id = OLD.reply_to_id;
+      -- Decrement the number of nested replies of the thread being replied to
+      update "#{@table}"
+        set nested_replies_count = nested_replies_count - 1
+        where id  = OLD.thread_id
+          and id != OLD.reply_to_id;
+      -- Decrement the number of nested replies of each of the parents in the reply tree path, except for the path ids that were already updated above
+      update "#{@table}"
+        set nested_replies_count = nested_replies_count - 1
+        where id  = ANY(OLD.path)
+          and id != OLD.reply_to_id
+          and id != OLD.thread_id;
+      return null;
+    end if;
   end;
   $$;
   """
 
   def create_trigger, do: """
-  create trigger #{@table}_trigger
-  AFTER INSERT OR DELETE
-      ON #{@trigger_table}
-  FOR EACH ROW
-      EXECUTE PROCEDURE #{@table}_update();
+  create trigger "#{@table}_trigger"
+  after insert or delete on "#{@trigger_table}"
+  for each row execute procedure "#{@table}_update"();
   """
 
-  @drop_fun "drop function IF EXISTS #{@table}_update CASCADE"
-  @drop_trigger "drop trigger IF EXISTS #{@table}_trigger ON #{@trigger_table}"
+  @drop_fun     ~s[drop function if exists "#{@table}_update" CASCADE]
+  @drop_trigger ~s[drop trigger if exists "#{@table}_trigger" ON "#{@trigger_table}"]
 
   def migrate_functions do
     # this has the appearance of being muddled, but it's not
@@ -141,15 +131,11 @@ defmodule Bonfire.Data.Social.Replied.Migration do
     quote do
       require Pointers.Migration
       Pointers.Migration.create_mixin_table(unquote(@table)) do
-
         Ecto.Migration.add :reply_to_id, Pointers.Migration.strong_pointer()
         Ecto.Migration.add :thread_id, Pointers.Migration.strong_pointer()
-
         Ecto.Migration.add :path, {:array, :uuid}, default: [], null: false
-
         Ecto.Migration.add :direct_replies_count, :bigint, null: false, default: 0
         Ecto.Migration.add :nested_replies_count, :bigint, null: false, default: 0
-
         unquote_splicing(exprs)
       end
     end

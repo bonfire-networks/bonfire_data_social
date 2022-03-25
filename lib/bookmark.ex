@@ -5,24 +5,15 @@ defmodule Bonfire.Data.Social.Bookmark do
     table_id: "0EMEMBERS0METH1NGSF0R1ATER",
     source: "bonfire_data_social_bookmark"
 
-  alias Bonfire.Data.Social.Bookmark
   alias Bonfire.Data.Edges.Edge
-  alias Ecto.Changeset
-  alias Pointers.Pointer
+  alias Bonfire.Data.Social.Bookmark
   alias Pointers.Changesets
 
   virtual_schema do
     has_one :edge, Edge, foreign_key: :id
   end
 
-  def changeset(bookmark \\ %Bookmark{}, params)
-
-  def changeset(bookmark, params) do
-    bookmark
-    |> Changesets.cast(params, [])
-    |> Changeset.put_assoc(:edge, %{table_id: __pointers__(:table_id)})
-    |> Changeset.cast_assoc(:edge)
-  end
+  def changeset(bookmark \\ %Bookmark{}, params), do: Changesets.cast(bookmark, params, [])
 
 end
 defmodule Bonfire.Data.Social.Bookmark.Migration do
