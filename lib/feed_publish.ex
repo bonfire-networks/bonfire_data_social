@@ -55,7 +55,7 @@ defmodule Bonfire.Data.Social.FeedPublish.Migration do
   defmacro create_feed_publish_table(), do: make_feed_publish_table([])
   defmacro create_feed_publish_table([do: {_, _, body}]), do: make_feed_publish_table(body)
 
-  def drop_feed_publish_table(), do: drop_pointable_table(FeedPublish)
+  def drop_feed_publish_table(), do: drop_mixin_table(FeedPublish)
 
 
   def migrate_feed_publish_feed_index(dir \\ direction(), opts \\ [])
