@@ -21,7 +21,6 @@ defmodule Bonfire.Data.Social.Flag.Migration do
   import Ecto.Migration
   import Pointers.Migration
   import Bonfire.Data.Edges.Edge.Migration
-  import Bonfire.Data.Edges.EdgeTotal.Migration
   alias Bonfire.Data.Social.Flag
 
   def migrate_flag_view(), do: migrate_virtual(Flag)

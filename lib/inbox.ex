@@ -5,7 +5,6 @@
 
   alias Bonfire.Data.Social.{Feed, Inbox}
   alias Ecto.Changeset
-  alias Pointers.Pointer
 
   mixin_schema do
     belongs_to :feed, Feed
@@ -24,7 +23,7 @@ end
 defmodule Bonfire.Data.Social.Inbox.Migration do
   use Ecto.Migration
   import Pointers.Migration
-  alias Bonfire.Data.Social.{Inbox, Feed}
+  alias Bonfire.Data.Social.Inbox
 
   # create_inbox_table/{0, 1}
 

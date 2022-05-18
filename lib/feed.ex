@@ -7,7 +7,6 @@ defmodule Bonfire.Data.Social.Feed do
 
   alias Bonfire.Data.Social.Feed
   alias Bonfire.Data.Social.FeedPublish
-  alias Ecto.Changeset
   alias Pointers.Changesets
 
   virtual_schema do

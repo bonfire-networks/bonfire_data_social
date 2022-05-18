@@ -20,7 +20,6 @@ defmodule Bonfire.Data.Social.Bookmark.Migration do
 
   import Ecto.Migration
   import Pointers.Migration
-  import Bonfire.Data.Edges.Edge.Migration
   import Bonfire.Data.Edges.EdgeTotal.Migration
   alias Bonfire.Data.Social.Bookmark
 

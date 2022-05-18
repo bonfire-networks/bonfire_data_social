@@ -15,14 +15,14 @@ defmodule Bonfire.Data.Social.Replied do
   mixin_schema do
     belongs_to :reply_to, Pointer
     belongs_to :thread, Pointer
-    # Kept updated by triggers. Total replies = direct replies + nested replies. 
+    # Kept updated by triggers. Total replies = direct replies + nested replies.
     field :direct_replies_count, :integer, default: 0
     field :nested_replies_count, :integer, default: 0
     field :path, EctoMaterializedPath.ULIDs, default: [] # default is important here
   end
 
   @cast [:reply_to_id, :thread_id]
-  @required [:reply_to_id]
+  # @required [:reply_to_id]
 
   def changeset(replied \\ %Replied{}, attrs)
 
@@ -120,9 +120,9 @@ defmodule Bonfire.Data.Social.Replied.Migration do
 
   def migrate_functions do
     # this has the appearance of being muddled, but it's not
-    Ecto.Migration.execute(create_fun, @drop_fun)
+    Ecto.Migration.execute(create_fun(), @drop_fun)
     Ecto.Migration.execute(@drop_trigger, @drop_trigger) # to replace if changed
-    Ecto.Migration.execute(create_trigger, @drop_trigger)
+    Ecto.Migration.execute(create_trigger(), @drop_trigger)
   end
 
   # create_replied_table/{0, 1}
