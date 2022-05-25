@@ -9,6 +9,7 @@ defmodule Bonfire.Data.Social.Message do
   alias Pointers.Changesets
 
   virtual_schema do
+    field :thread_id, Pointers.ULID, virtual: true
   end
 
   def changeset(message \\ %Message{}, params), do: Changesets.cast(message, params, [])
