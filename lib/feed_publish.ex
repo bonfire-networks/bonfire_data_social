@@ -1,6 +1,6 @@
 defmodule Bonfire.Data.Social.FeedPublish do
   @moduledoc """
-  A multimixin for an object appearing in a feed.
+  A multimixin for an activity/object appearing in a feed.
 
   A quite interesting thing about this model is that feed_id
   references Pointer, so it isn't only things of type Feed that it can
