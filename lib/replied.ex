@@ -6,7 +6,7 @@ defmodule Bonfire.Data.Social.Replied do
   # to query trees:
   use EctoMaterializedPath
 
-  import Where
+  import Untangle
 
   alias Bonfire.Data.Social.Replied
   alias Ecto.Changeset
