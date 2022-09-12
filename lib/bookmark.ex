@@ -1,5 +1,4 @@
 defmodule Bonfire.Data.Social.Bookmark do
-
   use Pointers.Virtual,
     otp_app: :bonfire_data_social,
     table_id: "0EMEMBERS0METH1NGSF0R1ATER",
@@ -10,14 +9,14 @@ defmodule Bonfire.Data.Social.Bookmark do
   alias Pointers.Changesets
 
   virtual_schema do
-    has_one :edge, Edge, foreign_key: :id
+    has_one(:edge, Edge, foreign_key: :id)
   end
 
-  def changeset(bookmark \\ %Bookmark{}, params), do: Changesets.cast(bookmark, params, [])
-
+  def changeset(bookmark \\ %Bookmark{}, params),
+    do: Changesets.cast(bookmark, params, [])
 end
-defmodule Bonfire.Data.Social.Bookmark.Migration do
 
+defmodule Bonfire.Data.Social.Bookmark.Migration do
   import Ecto.Migration
   import Pointers.Migration
   import Bonfire.Data.Edges.EdgeTotal.Migration
@@ -38,5 +37,4 @@ defmodule Bonfire.Data.Social.Bookmark.Migration do
     migrate_bookmark_total_view()
     migrate_bookmark_view()
   end
-
 end

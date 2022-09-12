@@ -1,7 +1,7 @@
 defmodule Bonfire.Data.Social.Seen do
-@moduledoc """
-  Track seen/unseen (similar to read/unread, but only indicates that it was displayed in a feed or other listing for the user, not that they actually read it) status of things (usually an `Activity`)
-"""
+  @moduledoc """
+    Track seen/unseen (similar to read/unread, but only indicates that it was displayed in a feed or other listing for the user, not that they actually read it) status of things (usually an `Activity`)
+  """
   use Pointers.Virtual,
     otp_app: :bonfire_data_social,
     table_id: "1A1READYSAW0RREADTH1STH1NG",
@@ -12,14 +12,13 @@ defmodule Bonfire.Data.Social.Seen do
   alias Pointers.Changesets
 
   virtual_schema do
-    has_one :edge, Edge, foreign_key: :id
+    has_one(:edge, Edge, foreign_key: :id)
   end
 
   def changeset(seen \\ %Seen{}, params), do: Changesets.cast(seen, params, [])
-
 end
-defmodule Bonfire.Data.Social.Seen.Migration do
 
+defmodule Bonfire.Data.Social.Seen.Migration do
   import Ecto.Migration
   import Pointers.Migration
   import Bonfire.Data.Edges.Edge.Migration
@@ -45,5 +44,4 @@ defmodule Bonfire.Data.Social.Seen.Migration do
     migrate_seen_unique_index()
     migrate_seen_view()
   end
-
 end

@@ -1,13 +1,15 @@
- defmodule Bonfire.Data.Social.Inbox do
+defmodule Bonfire.Data.Social.Inbox do
   use Pointers.Mixin,
     otp_app: :bonfire_data_social,
     source: "bonfire_data_social_inbox"
 
-  alias Bonfire.Data.Social.{Feed, Inbox}
+  alias Bonfire.Data.Social.Feed
+  alias Bonfire.Data.Social.Inbox
+
   alias Ecto.Changeset
 
   mixin_schema do
-    belongs_to :feed, Feed
+    belongs_to(:feed, Feed)
   end
 
   @cast [:feed_id, :id]
@@ -30,15 +32,16 @@ defmodule Bonfire.Data.Social.Inbox.Migration do
   defp make_inbox_table(exprs) do
     quote do
       require Pointers.Migration
-      Pointers.Migration.create_mixin_table(Bonfire.Data.Social.Inbox) do
-        Ecto.Migration.add :feed_id, Pointers.Migration.strong_pointer()
+
+      Pointers.Migration.create_mixin_table Bonfire.Data.Social.Inbox do
+        Ecto.Migration.add(:feed_id, Pointers.Migration.strong_pointer())
         unquote_splicing(exprs)
       end
     end
   end
 
   defmacro create_inbox_table(), do: make_inbox_table([])
-  defmacro create_inbox_table([do: {_, _, body}]), do: make_inbox_table(body)
+  defmacro create_inbox_table(do: {_, _, body}), do: make_inbox_table(body)
 
   # drop_inbox_table/0
 
@@ -63,5 +66,4 @@ defmodule Bonfire.Data.Social.Inbox.Migration do
   end
 
   defmacro migrate_inbox(dir), do: mi(dir)
-
 end

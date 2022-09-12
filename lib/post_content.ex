@@ -7,9 +7,9 @@ defmodule Bonfire.Data.Social.PostContent do
   alias Ecto.Changeset
 
   mixin_schema do
-    field :name, :string
-    field :summary, :string
-    field :html_body, :string
+    field(:name, :string)
+    field(:summary, :string)
+    field(:html_body, :string)
   end
 
   @cast [:name, :summary, :html_body]
@@ -32,17 +32,20 @@ defmodule Bonfire.Data.Social.PostContent.Migration do
   defp make_post_content_table(exprs) do
     quote do
       require Pointers.Migration
-      Pointers.Migration.create_mixin_table(Bonfire.Data.Social.PostContent) do
-        Ecto.Migration.add :name, :text
-        Ecto.Migration.add :summary, :text
-        Ecto.Migration.add :html_body, :text
+
+      Pointers.Migration.create_mixin_table Bonfire.Data.Social.PostContent do
+        Ecto.Migration.add(:name, :text)
+        Ecto.Migration.add(:summary, :text)
+        Ecto.Migration.add(:html_body, :text)
         unquote_splicing(exprs)
       end
     end
   end
 
   defmacro create_post_content_table(), do: make_post_content_table([])
-  defmacro create_post_content_table([do: {_, _, body}]), do: make_post_content_table(body)
+
+  defmacro create_post_content_table(do: {_, _, body}),
+    do: make_post_content_table(body)
 
   # drop_post_content_table/0
 
@@ -65,6 +68,6 @@ defmodule Bonfire.Data.Social.PostContent.Migration do
         else: unquote(mpc(:down))
     end
   end
-  defmacro migrate_post_content(dir), do: mpc(dir)
 
+  defmacro migrate_post_content(dir), do: mpc(dir)
 end

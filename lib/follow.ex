@@ -1,5 +1,4 @@
 defmodule Bonfire.Data.Social.Follow do
-
   use Pointers.Virtual,
     otp_app: :bonfire_data_social,
     table_id: "70110WTHE1EADER1EADER1EADE",
@@ -10,14 +9,14 @@ defmodule Bonfire.Data.Social.Follow do
   alias Pointers.Changesets
 
   virtual_schema do
-    has_one :edge, Edge, foreign_key: :id
+    has_one(:edge, Edge, foreign_key: :id)
   end
 
-  def changeset(follow \\ %Follow{}, params), do: Changesets.cast(follow, params, [])
-
+  def changeset(follow \\ %Follow{}, params),
+    do: Changesets.cast(follow, params, [])
 end
-defmodule Bonfire.Data.Social.Follow.Migration do
 
+defmodule Bonfire.Data.Social.Follow.Migration do
   import Ecto.Migration
   import Pointers.Migration
   import Bonfire.Data.Edges.Edge.Migration
@@ -43,5 +42,4 @@ defmodule Bonfire.Data.Social.Follow.Migration do
     migrate_follow_unique_index()
     migrate_follow_view()
   end
-
 end

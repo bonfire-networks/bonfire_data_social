@@ -1,5 +1,4 @@
 defmodule Bonfire.Data.Social.Flag do
-
   use Pointers.Virtual,
     otp_app: :bonfire_data_social,
     table_id: "71AGSPAM0RVNACCEPTAB1E1TEM",
@@ -10,14 +9,13 @@ defmodule Bonfire.Data.Social.Flag do
   alias Pointers.Changesets
 
   virtual_schema do
-    has_one :edge, Edge, foreign_key: :id
+    has_one(:edge, Edge, foreign_key: :id)
   end
 
   def changeset(flag \\ %Flag{}, params), do: Changesets.cast(flag, params, [])
-
 end
-defmodule Bonfire.Data.Social.Flag.Migration do
 
+defmodule Bonfire.Data.Social.Flag.Migration do
   import Ecto.Migration
   import Pointers.Migration
   import Bonfire.Data.Edges.Edge.Migration
@@ -38,5 +36,4 @@ defmodule Bonfire.Data.Social.Flag.Migration do
     migrate_flag_unique_index()
     migrate_flag_view()
   end
-
 end

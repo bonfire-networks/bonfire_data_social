@@ -1,5 +1,4 @@
 defmodule Bonfire.Data.Social.Boost do
-
   use Pointers.Virtual,
     otp_app: :bonfire_data_social,
     table_id: "300STANN0VNCERESHARESH0VTS",
@@ -10,14 +9,14 @@ defmodule Bonfire.Data.Social.Boost do
   alias Pointers.Changesets
 
   virtual_schema do
-    has_one :edge, Edge, foreign_key: :id
+    has_one(:edge, Edge, foreign_key: :id)
   end
 
-  def changeset(boost \\ %Boost{}, params), do: Changesets.cast(boost, params, [])
-
+  def changeset(boost \\ %Boost{}, params),
+    do: Changesets.cast(boost, params, [])
 end
-defmodule Bonfire.Data.Social.Boost.Migration do
 
+defmodule Bonfire.Data.Social.Boost.Migration do
   import Ecto.Migration
   import Pointers.Migration
   import Bonfire.Data.Edges.EdgeTotal.Migration
@@ -38,5 +37,4 @@ defmodule Bonfire.Data.Social.Boost.Migration do
     migrate_boost_total_view()
     migrate_boost_view()
   end
-
 end

@@ -8,7 +8,7 @@ defmodule Bonfire.Data.Social.Created do
   alias Pointers.Pointer
 
   mixin_schema do
-    belongs_to :creator, Pointer
+    belongs_to(:creator, Pointer)
   end
 
   @cast [:creator_id]
@@ -32,15 +32,16 @@ defmodule Bonfire.Data.Social.Created.Migration do
   defp make_created_table(exprs) do
     quote do
       require Pointers.Migration
-      Pointers.Migration.create_mixin_table(Bonfire.Data.Social.Created) do
-        Ecto.Migration.add :creator_id, Pointers.Migration.strong_pointer()
+
+      Pointers.Migration.create_mixin_table Bonfire.Data.Social.Created do
+        Ecto.Migration.add(:creator_id, Pointers.Migration.strong_pointer())
         unquote_splicing(exprs)
       end
     end
   end
 
   defmacro create_created_table(), do: make_created_table([])
-  defmacro create_created_table([do: {_, _, body}]), do: make_created_table(body)
+  defmacro create_created_table(do: {_, _, body}), do: make_created_table(body)
 
   # drop_created_table/0
 
@@ -65,5 +66,4 @@ defmodule Bonfire.Data.Social.Created.Migration do
   end
 
   defmacro migrate_created(dir), do: mcd(dir)
-
 end

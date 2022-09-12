@@ -1,5 +1,4 @@
 defmodule Bonfire.Data.Social.Like do
-
   use Pointers.Virtual,
     otp_app: :bonfire_data_social,
     table_id: "11KES11KET0BE11KEDY0VKN0WS",
@@ -10,14 +9,13 @@ defmodule Bonfire.Data.Social.Like do
   alias Pointers.Changesets
 
   virtual_schema do
-    has_one :edge, Edge, foreign_key: :id
+    has_one(:edge, Edge, foreign_key: :id)
   end
 
   def changeset(like \\ %Like{}, params), do: Changesets.cast(like, params, [])
-
 end
-defmodule Bonfire.Data.Social.Like.Migration do
 
+defmodule Bonfire.Data.Social.Like.Migration do
   import Ecto.Migration
   import Pointers.Migration
   import Bonfire.Data.Edges.Edge.Migration
@@ -43,5 +41,4 @@ defmodule Bonfire.Data.Social.Like.Migration do
     migrate_like_unique_index()
     migrate_like_view()
   end
-
 end

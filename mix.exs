@@ -1,4 +1,5 @@
 Code.eval_file("mess.exs")
+
 defmodule Bonfire.Data.Social.MixProject do
   use Mix.Project
 
@@ -14,18 +15,20 @@ defmodule Bonfire.Data.Social.MixProject do
       package: [
         licenses: ["MPL 2.0"],
         links: %{
-          "Repository" => "https://github.com/bonfire-networks/bonfire_data_social",
-          "Hexdocs" => "https://hexdocs.pm/bonfire_data_social",
-        },
+          "Repository" =>
+            "https://github.com/bonfire-networks/bonfire_data_social",
+          "Hexdocs" => "https://hexdocs.pm/bonfire_data_social"
+        }
       ],
       docs: [
-        main: "readme", # The first page to display from the docs
-        extras: ["README.md"], # extra pages to include
+        # The first page to display from the docs
+        main: "readme",
+        # extra pages to include
+        extras: ["README.md"]
       ],
-      deps: Mess.deps [ {:ex_doc, ">= 0.0.0", only: :dev, runtime: false} ]
+      deps: Mess.deps([{:ex_doc, ">= 0.0.0", only: :dev, runtime: false}])
     ]
   end
 
   def application, do: [extra_applications: [:logger]]
-
 end

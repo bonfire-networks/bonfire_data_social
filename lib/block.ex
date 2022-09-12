@@ -1,5 +1,4 @@
 defmodule Bonfire.Data.Social.Block do
-
   use Pointers.Virtual,
     otp_app: :bonfire_data_social,
     table_id: "310CK1NGSTVFFAV01DSSEE1NG1",
@@ -10,14 +9,14 @@ defmodule Bonfire.Data.Social.Block do
   alias Pointers.Changesets
 
   virtual_schema do
-    has_one :edge, Edge, foreign_key: :id
+    has_one(:edge, Edge, foreign_key: :id)
   end
 
-  def changeset(block \\ %Block{}, params), do: Changesets.cast(block, params, [])
-
+  def changeset(block \\ %Block{}, params),
+    do: Changesets.cast(block, params, [])
 end
-defmodule Bonfire.Data.Social.Block.Migration do
 
+defmodule Bonfire.Data.Social.Block.Migration do
   import Ecto.Migration
   import Pointers.Migration
   import Bonfire.Data.Edges.Edge.Migration
@@ -38,5 +37,4 @@ defmodule Bonfire.Data.Social.Block.Migration do
     migrate_block_unique_index()
     migrate_block_view()
   end
-
 end

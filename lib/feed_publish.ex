@@ -17,10 +17,10 @@ defmodule Bonfire.Data.Social.FeedPublish do
   alias Ecto.Changeset
 
   mixin_schema do
-    belongs_to :feed, Pointer, primary_key: true
+    belongs_to(:feed, Pointer, primary_key: true)
   end
 
-  @cast     [:feed_id]
+  @cast [:feed_id]
   @required [:feed_id]
   def changeset(pub \\ %FeedPublish{}, params) do
     pub
@@ -29,10 +29,9 @@ defmodule Bonfire.Data.Social.FeedPublish do
     |> Changeset.assoc_constraint(:feed)
     |> Changeset.unique_constraint(@cast)
   end
-
 end
-defmodule Bonfire.Data.Social.FeedPublish.Migration do
 
+defmodule Bonfire.Data.Social.FeedPublish.Migration do
   import Ecto.Migration
   import Pointers.Migration
   alias Bonfire.Data.Social.FeedPublish
@@ -44,29 +43,38 @@ defmodule Bonfire.Data.Social.FeedPublish.Migration do
   defp make_feed_publish_table(exprs) do
     quote do
       require Pointers.Migration
-      Pointers.Migration.create_mixin_table(Bonfire.Data.Social.FeedPublish) do
-        Ecto.Migration.add :feed_id,
-          Pointers.Migration.strong_pointer(), primary_key: true
+
+      Pointers.Migration.create_mixin_table Bonfire.Data.Social.FeedPublish do
+        Ecto.Migration.add(
+          :feed_id,
+          Pointers.Migration.strong_pointer(),
+          primary_key: true
+        )
+
         unquote_splicing(exprs)
       end
     end
   end
 
   defmacro create_feed_publish_table(), do: make_feed_publish_table([])
-  defmacro create_feed_publish_table([do: {_, _, body}]), do: make_feed_publish_table(body)
+
+  defmacro create_feed_publish_table(do: {_, _, body}),
+    do: make_feed_publish_table(body)
 
   def drop_feed_publish_table(), do: drop_mixin_table(FeedPublish)
 
-
   def migrate_feed_publish_feed_index(dir \\ direction(), opts \\ [])
+
   def migrate_feed_publish_feed_index(:up, opts),
     do: create_if_not_exists(index(@feed_publish_table, [:feed_id], opts))
+
   def migrate_feed_publish_feed_index(:down, opts),
     do: drop_if_exists(index(@feed_publish_table, [:feed_id], opts))
 
   defp mf(:up) do
     quote do
       Bonfire.Data.Social.FeedPublish.Migration.create_feed_publish_table()
+
       Bonfire.Data.Social.FeedPublish.Migration.migrate_feed_publish_feed_index()
     end
   end
@@ -87,5 +95,4 @@ defmodule Bonfire.Data.Social.FeedPublish.Migration do
   end
 
   defmacro migrate_feed_publish(dir), do: mf(dir)
-
 end
