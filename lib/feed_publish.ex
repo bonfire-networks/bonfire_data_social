@@ -32,6 +32,7 @@ defmodule Bonfire.Data.Social.FeedPublish do
 end
 
 defmodule Bonfire.Data.Social.FeedPublish.Migration do
+  @moduledoc false
   import Ecto.Migration
   import Pointers.Migration
   alias Bonfire.Data.Social.FeedPublish

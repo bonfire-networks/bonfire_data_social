@@ -68,6 +68,7 @@ defmodule Bonfire.Data.Social.Replied do
 end
 
 defmodule Bonfire.Data.Social.Replied.Migration do
+  @moduledoc false
   use Ecto.Migration
   import Pointers.Migration
   alias Bonfire.Data.Social.Replied

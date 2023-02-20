@@ -16,6 +16,7 @@ defmodule Bonfire.Data.Social.Like do
 end
 
 defmodule Bonfire.Data.Social.Like.Migration do
+  @moduledoc false
   import Ecto.Migration
   import Pointers.Migration
   import Bonfire.Data.Edges.Edge.Migration

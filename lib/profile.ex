@@ -26,6 +26,7 @@ defmodule Bonfire.Data.Social.Profile do
 end
 
 defmodule Bonfire.Data.Social.Profile.Migration do
+  @moduledoc false
   import Pointers.Migration
   alias Bonfire.Data.Social.Profile
 

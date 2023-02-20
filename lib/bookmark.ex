@@ -17,6 +17,7 @@ defmodule Bonfire.Data.Social.Bookmark do
 end
 
 defmodule Bonfire.Data.Social.Bookmark.Migration do
+  @moduledoc false
   import Ecto.Migration
   import Pointers.Migration
   import Bonfire.Data.Edges.EdgeTotal.Migration

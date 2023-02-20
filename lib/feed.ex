@@ -19,6 +19,7 @@ defmodule Bonfire.Data.Social.Feed do
 end
 
 defmodule Bonfire.Data.Social.Feed.Migration do
+  @moduledoc false
   import Pointers.Migration
   alias Bonfire.Data.Social.Feed
 

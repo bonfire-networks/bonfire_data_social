@@ -16,6 +16,7 @@ defmodule Bonfire.Data.Social.Message do
 end
 
 defmodule Bonfire.Data.Social.Message.Migration do
+  @moduledoc false
   import Pointers.Migration
   alias Bonfire.Data.Social.Message
 

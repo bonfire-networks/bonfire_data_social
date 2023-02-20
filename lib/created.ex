@@ -23,6 +23,7 @@ defmodule Bonfire.Data.Social.Created do
 end
 
 defmodule Bonfire.Data.Social.Created.Migration do
+  @moduledoc false
   use Ecto.Migration
   import Pointers.Migration
   alias Bonfire.Data.Social.Created

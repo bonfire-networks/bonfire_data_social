@@ -17,6 +17,7 @@ defmodule Bonfire.Data.Social.Block do
 end
 
 defmodule Bonfire.Data.Social.Block.Migration do
+  @moduledoc false
   import Ecto.Migration
   import Pointers.Migration
   import Bonfire.Data.Edges.Edge.Migration
