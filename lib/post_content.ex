@@ -13,7 +13,7 @@ defmodule Bonfire.Data.Social.PostContent do
   end
 
   @cast [:name, :summary, :html_body]
-  @required [:html_body]
+  @required []
 
   def changeset(content \\ %PostContent{}, params) do
     content
