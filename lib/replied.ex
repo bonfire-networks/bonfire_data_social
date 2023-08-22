@@ -16,8 +16,13 @@ defmodule Bonfire.Data.Social.Replied do
     belongs_to(:reply_to, Pointer)
     belongs_to(:thread, Pointer)
     # Kept updated by triggers. Total replies = direct replies + nested replies.
+
     field(:direct_replies_count, :integer, default: 0)
     field(:nested_replies_count, :integer, default: 0)
+
+    # auto-generated from the two others
+    field(:total_replies_count, :integer, default: 0)
+
     # default is important here
     field(:path, EctoMaterializedPath.ULIDs, default: [])
   end
@@ -136,6 +141,8 @@ defmodule Bonfire.Data.Social.Replied.Migration do
   @drop_fun ~s[drop function if exists "#{@table}_update" CASCADE]
   @drop_trigger ~s[drop trigger if exists "#{@table}_trigger" ON "#{@trigger_table}"]
 
+  @generated_total_column "total_replies_count bigint GENERATED ALWAYS AS (direct_replies_count + nested_replies_count) STORED"
+
   def migrate_functions do
     # this has the appearance of being muddled, but it's not
     Ecto.Migration.execute(create_fun(), @drop_fun)
@@ -168,6 +175,10 @@ defmodule Bonfire.Data.Social.Replied.Migration do
         unquote_splicing(exprs)
       end
     end
+  end
+
+  def add_generated_total_column do
+    execute("ALTER TABLE #{@table} ADD COLUMN IF NOT EXISTS " <> @generated_total_column)
   end
 
   defmacro create_replied_table(), do: make_replied_table([])
