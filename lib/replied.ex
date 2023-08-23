@@ -21,7 +21,7 @@ defmodule Bonfire.Data.Social.Replied do
     field(:nested_replies_count, :integer, default: 0)
 
     # auto-generated from the two others
-    field(:total_replies_count, :integer, default: 0)
+    field(:total_replies_count, :integer)
 
     # default is important here
     field(:path, EctoMaterializedPath.ULIDs, default: [])
