@@ -21,7 +21,7 @@ defmodule Bonfire.Data.Social.Replied do
     field(:nested_replies_count, :integer, default: 0)
 
     # auto-generated from the two others
-    field(:total_replies_count, :integer, default: 0)
+    # field(:total_replies_count, :integer, default: 0, virtual: true) # NOTE: currently using separate RepliedTotal schema because Ecto doesn't support read-only fields
 
     # default is important here
     field(:path, EctoMaterializedPath.ULIDs, default: [])
@@ -69,6 +69,36 @@ defmodule Bonfire.Data.Social.Replied do
     debug("Replied - recording a top level post")
 
     Changeset.cast(replied, attrs, @cast)
+  end
+end
+
+defmodule Bonfire.Data.Social.RepliedTotal do
+  use Pointers.Mixin,
+    otp_app: :bonfire_data_social,
+    source: "bonfire_data_social_replied"
+
+  # to query trees:
+  use EctoMaterializedPath
+
+  import Untangle
+
+  alias Bonfire.Data.Social.Replied
+  alias Ecto.Changeset
+  alias Pointers.Pointer
+
+  mixin_schema do
+    belongs_to(:reply_to, Pointer)
+    belongs_to(:thread, Pointer)
+    # Kept updated by triggers. Total replies = direct replies + nested replies.
+
+    field(:direct_replies_count, :integer, default: 0)
+    field(:nested_replies_count, :integer, default: 0)
+
+    # auto-generated from the two others
+    field(:total_replies_count, :integer, default: 0)
+
+    # default is important here
+    field(:path, EctoMaterializedPath.ULIDs, default: [])
   end
 end
 
