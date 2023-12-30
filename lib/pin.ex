@@ -1,12 +1,12 @@
 defmodule Bonfire.Data.Social.Pin do
-  use Pointers.Virtual,
+  use Needle.Virtual,
     otp_app: :bonfire_data_social,
     table_id: "1P1NS0METH1NGT0H1GH11GHT1T",
     source: "bonfire_data_social_pin"
 
   alias Bonfire.Data.Edges.Edge
   alias Bonfire.Data.Social.Pin
-  alias Pointers.Changesets
+  alias Needle.Changesets
 
   virtual_schema do
     has_one(:edge, Edge, foreign_key: :id)
@@ -18,7 +18,7 @@ end
 defmodule Bonfire.Data.Social.Pin.Migration do
   @moduledoc false
   import Ecto.Migration
-  import Pointers.Migration
+  import Needle.Migration
   import Bonfire.Data.Edges.Edge.Migration
   import Bonfire.Data.Edges.EdgeTotal.Migration
   alias Bonfire.Data.Social.Pin

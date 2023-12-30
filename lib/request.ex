@@ -1,10 +1,10 @@
 defmodule Bonfire.Data.Social.Request do
-  use Pointers.Pointable,
+  use Needle.Pointable,
     otp_app: :bonfire_data_social,
     table_id: "7NEEDPERM1SS10NT0D0TH1SN0W",
     source: "bonfire_data_social_request"
 
-  require Pointers.Changesets
+  require Needle.Changesets
   alias Bonfire.Data.Social.Request
   alias Bonfire.Data.Edges.Edge
   alias Ecto.Changeset
@@ -25,16 +25,16 @@ end
 defmodule Bonfire.Data.Social.Request.Migration do
   @moduledoc false
   use Ecto.Migration
-  import Pointers.Migration
+  import Needle.Migration
   alias Bonfire.Data.Social.Request
 
   # create_request_table/{0,1}
 
   defp make_request_table(exprs) do
     quote do
-      require Pointers.Migration
+      require Needle.Migration
 
-      Pointers.Migration.create_pointable_table Bonfire.Data.Social.Request do
+      Needle.Migration.create_pointable_table Bonfire.Data.Social.Request do
         add(:accepted_at, :timestamptz, null: true)
         add(:ignored_at, :timestamptz, null: true)
         unquote_splicing(exprs)

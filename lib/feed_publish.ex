@@ -7,12 +7,12 @@ defmodule Bonfire.Data.Social.FeedPublish do
   appear in, they are just an obvious choice.
   """
 
-  use Pointers.Mixin,
+  use Needle.Mixin,
     otp_app: :bonfire_data_social,
     source: "bonfire_data_social_feed_publish"
 
-  require Pointers.Changesets
-  alias Pointers.Pointer
+  require Needle.Changesets
+  alias Needle.Pointer
   alias Bonfire.Data.Social.FeedPublish
   alias Ecto.Changeset
 
@@ -34,7 +34,7 @@ end
 defmodule Bonfire.Data.Social.FeedPublish.Migration do
   @moduledoc false
   import Ecto.Migration
-  import Pointers.Migration
+  import Needle.Migration
   alias Bonfire.Data.Social.FeedPublish
 
   @feed_publish_table FeedPublish.__schema__(:source)
@@ -43,12 +43,12 @@ defmodule Bonfire.Data.Social.FeedPublish.Migration do
 
   defp make_feed_publish_table(exprs) do
     quote do
-      require Pointers.Migration
+      require Needle.Migration
 
-      Pointers.Migration.create_mixin_table Bonfire.Data.Social.FeedPublish do
+      Needle.Migration.create_mixin_table Bonfire.Data.Social.FeedPublish do
         Ecto.Migration.add(
           :feed_id,
-          Pointers.Migration.strong_pointer(),
+          Needle.Migration.strong_pointer(),
           primary_key: true
         )
 

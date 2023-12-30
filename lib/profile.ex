@@ -1,5 +1,5 @@
 defmodule Bonfire.Data.Social.Profile do
-  use Pointers.Mixin,
+  use Needle.Mixin,
     otp_app: :bonfire_data_social,
     source: "bonfire_data_social_profile"
 
@@ -27,16 +27,16 @@ end
 
 defmodule Bonfire.Data.Social.Profile.Migration do
   @moduledoc false
-  import Pointers.Migration
+  import Needle.Migration
   alias Bonfire.Data.Social.Profile
 
   # create_profile_table/{0,1}
 
   defp make_profile_table(exprs) do
     quote do
-      require Pointers.Migration
+      require Needle.Migration
 
-      Pointers.Migration.create_mixin_table Bonfire.Data.Social.Profile do
+      Needle.Migration.create_mixin_table Bonfire.Data.Social.Profile do
         Ecto.Migration.add(:name, :text)
         Ecto.Migration.add(:summary, :text)
         Ecto.Migration.add(:website, :text)

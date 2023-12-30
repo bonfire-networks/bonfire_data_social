@@ -1,11 +1,11 @@
 defmodule Bonfire.Data.Social.Post do
-  use Pointers.Virtual,
+  use Needle.Virtual,
     otp_app: :bonfire_data_social,
     table_id: "30NF1REP0STTAB1ENVMBER0NEE",
     source: "bonfire_data_social_post"
 
   alias Bonfire.Data.Social.Post
-  alias Pointers.Changesets
+  alias Needle.Changesets
 
   virtual_schema do
   end
@@ -15,7 +15,7 @@ end
 
 defmodule Bonfire.Data.Social.Post.Migration do
   @moduledoc false
-  import Pointers.Migration
+  import Needle.Migration
   alias Bonfire.Data.Social.Post
 
   def migrate_post(), do: migrate_virtual(Post)

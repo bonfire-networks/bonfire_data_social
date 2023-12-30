@@ -1,5 +1,5 @@
 defmodule Bonfire.Data.Social.PostContent do
-  use Pointers.Mixin,
+  use Needle.Mixin,
     otp_app: :bonfire_data_social,
     source: "bonfire_data_social_post_content"
 
@@ -25,16 +25,16 @@ end
 defmodule Bonfire.Data.Social.PostContent.Migration do
   @moduledoc false
   use Ecto.Migration
-  import Pointers.Migration
+  import Needle.Migration
   alias Bonfire.Data.Social.PostContent
 
   # create_post_content_table/{0,1}
 
   defp make_post_content_table(exprs) do
     quote do
-      require Pointers.Migration
+      require Needle.Migration
 
-      Pointers.Migration.create_mixin_table Bonfire.Data.Social.PostContent do
+      Needle.Migration.create_mixin_table Bonfire.Data.Social.PostContent do
         Ecto.Migration.add(:name, :text)
         Ecto.Migration.add(:summary, :text)
         Ecto.Migration.add(:html_body, :text)

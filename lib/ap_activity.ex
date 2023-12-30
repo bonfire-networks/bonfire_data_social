@@ -1,12 +1,12 @@
 defmodule Bonfire.Data.Social.APActivity do
-  use Pointers.Pointable,
+  use Needle.Pointable,
     otp_app: :bonfire_data_social,
     table_id: "30NF1REAPACTTAB1ENVMBER0NE",
     source: "bonfire_data_social_apactivity"
 
   alias Bonfire.Data.Social.APActivity
   alias Ecto.Changeset
-  alias Pointers.Changesets
+  alias Needle.Changesets
 
   pointable_schema do
     field(:json, :map)
@@ -25,14 +25,14 @@ end
 defmodule Bonfire.Data.Social.APActivity.Migration do
   @moduledoc false
   use Ecto.Migration
-  import Pointers.Migration
+  import Needle.Migration
   alias Bonfire.Data.Social.APActivity
 
   defp make_apactivity_table(exprs) do
     quote do
-      require Pointers.Migration
+      require Needle.Migration
 
-      Pointers.Migration.create_pointable_table Bonfire.Data.Social.APActivity do
+      Needle.Migration.create_pointable_table Bonfire.Data.Social.APActivity do
         Ecto.Migration.add(:json, :jsonb)
         unquote_splicing(exprs)
       end

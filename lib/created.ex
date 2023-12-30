@@ -1,11 +1,11 @@
 defmodule Bonfire.Data.Social.Created do
-  use Pointers.Mixin,
+  use Needle.Mixin,
     otp_app: :bonfire_data_social,
     source: "bonfire_data_social_created"
 
   alias Bonfire.Data.Social.Created
   alias Ecto.Changeset
-  alias Pointers.Pointer
+  alias Needle.Pointer
 
   mixin_schema do
     belongs_to(:creator, Pointer)
@@ -25,17 +25,17 @@ end
 defmodule Bonfire.Data.Social.Created.Migration do
   @moduledoc false
   use Ecto.Migration
-  import Pointers.Migration
+  import Needle.Migration
   alias Bonfire.Data.Social.Created
 
   # create_created_table/{0, 1}
 
   defp make_created_table(exprs) do
     quote do
-      require Pointers.Migration
+      require Needle.Migration
 
-      Pointers.Migration.create_mixin_table Bonfire.Data.Social.Created do
-        Ecto.Migration.add(:creator_id, Pointers.Migration.strong_pointer())
+      Needle.Migration.create_mixin_table Bonfire.Data.Social.Created do
+        Ecto.Migration.add(:creator_id, Needle.Migration.strong_pointer())
         unquote_splicing(exprs)
       end
     end

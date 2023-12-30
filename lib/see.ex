@@ -2,14 +2,14 @@ defmodule Bonfire.Data.Social.Seen do
   @moduledoc """
     Track seen/unseen (similar to read/unread, but only indicates that it was displayed in a feed or other listing for the user, not that they actually read it) status of things (usually an `Activity`)
   """
-  use Pointers.Virtual,
+  use Needle.Virtual,
     otp_app: :bonfire_data_social,
     table_id: "1A1READYSAW0RREADTH1STH1NG",
     source: "bonfire_data_social_seen"
 
   alias Bonfire.Data.Edges.Edge
   alias Bonfire.Data.Social.Seen
-  alias Pointers.Changesets
+  alias Needle.Changesets
 
   virtual_schema do
     has_one(:edge, Edge, foreign_key: :id)
@@ -21,7 +21,7 @@ end
 defmodule Bonfire.Data.Social.Seen.Migration do
   @moduledoc false
   import Ecto.Migration
-  import Pointers.Migration
+  import Needle.Migration
   import Bonfire.Data.Edges.Edge.Migration
   import Bonfire.Data.Edges.EdgeTotal.Migration
   alias Bonfire.Data.Social.Seen

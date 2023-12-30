@@ -1,11 +1,11 @@
 defmodule Bonfire.Data.Social.Sensitive do
-  use Pointers.Mixin,
+  use Needle.Mixin,
     otp_app: :bonfire_data_social,
     source: "bonfire_data_social_sensitive"
 
   alias Bonfire.Data.Social.Sensitive
   alias Ecto.Changeset
-  alias Pointers.Pointer
+  alias Needle.Pointer
 
   mixin_schema do
     field(:is_sensitive, :boolean)
@@ -24,16 +24,16 @@ end
 defmodule Bonfire.Data.Social.Sensitive.Migration do
   @moduledoc false
   use Ecto.Migration
-  import Pointers.Migration
+  import Needle.Migration
   alias Bonfire.Data.Social.Sensitive
 
   # create_sensitive_table/{0, 1}
 
   defp make_sensitive_table(exprs) do
     quote do
-      require Pointers.Migration
+      require Needle.Migration
 
-      Pointers.Migration.create_mixin_table Bonfire.Data.Social.Sensitive do
+      Needle.Migration.create_mixin_table Bonfire.Data.Social.Sensitive do
         Ecto.Migration.add(:is_sensitive, :bool,
           null: false,
           default: false

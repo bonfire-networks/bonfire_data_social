@@ -1,6 +1,3 @@
 # arbor = "https://github.com/mayel/arbor" # for tree queries
-arrows = "https://github.com/bonfire-networks/arrows#main"
 bonfire_data_edges = "https://github.com/bonfire-networks/bonfire_data_edges#main"
 ecto_materialized_path = "https://github.com/bonfire-networks/ecto_materialized_path"
-pointers = "https://github.com/bonfire-networks/pointers#main"
-untangle = "https://github.com/bonfire-networks/untangle#main"

@@ -1,5 +1,5 @@
 defmodule Bonfire.Data.Social.Replied do
-  use Pointers.Mixin,
+  use Needle.Mixin,
     otp_app: :bonfire_data_social,
     source: "bonfire_data_social_replied"
 
@@ -10,7 +10,7 @@ defmodule Bonfire.Data.Social.Replied do
 
   alias Bonfire.Data.Social.Replied
   alias Ecto.Changeset
-  alias Pointers.Pointer
+  alias Needle.Pointer
 
   mixin_schema do
     belongs_to(:reply_to, Pointer)
@@ -75,7 +75,7 @@ end
 defmodule Bonfire.Data.Social.Replied.Migration do
   @moduledoc false
   use Ecto.Migration
-  import Pointers.Migration
+  import Needle.Migration
   alias Bonfire.Data.Social.Replied
 
   @table Replied.__schema__(:source)
@@ -155,11 +155,11 @@ defmodule Bonfire.Data.Social.Replied.Migration do
 
   defp make_replied_table(exprs) do
     quote do
-      require Pointers.Migration
+      require Needle.Migration
 
-      Pointers.Migration.create_mixin_table unquote(@table) do
-        Ecto.Migration.add(:reply_to_id, Pointers.Migration.strong_pointer())
-        Ecto.Migration.add(:thread_id, Pointers.Migration.strong_pointer())
+      Needle.Migration.create_mixin_table unquote(@table) do
+        Ecto.Migration.add(:reply_to_id, Needle.Migration.strong_pointer())
+        Ecto.Migration.add(:thread_id, Needle.Migration.strong_pointer())
         Ecto.Migration.add(:path, {:array, :uuid}, default: [], null: false)
 
         Ecto.Migration.add(:direct_replies_count, :bigint,

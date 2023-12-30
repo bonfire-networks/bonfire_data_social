@@ -1,12 +1,12 @@
 defmodule Bonfire.Data.Social.Boost do
-  use Pointers.Virtual,
+  use Needle.Virtual,
     otp_app: :bonfire_data_social,
     table_id: "300STANN0VNCERESHARESH0VTS",
     source: "bonfire_data_social_boost"
 
   alias Bonfire.Data.Edges.Edge
   alias Bonfire.Data.Social.Boost
-  alias Pointers.Changesets
+  alias Needle.Changesets
 
   virtual_schema do
     has_one(:edge, Edge, foreign_key: :id)
@@ -19,7 +19,7 @@ end
 defmodule Bonfire.Data.Social.Boost.Migration do
   @moduledoc false
   import Ecto.Migration
-  import Pointers.Migration
+  import Needle.Migration
   import Bonfire.Data.Edges.EdgeTotal.Migration
   alias Bonfire.Data.Social.Boost
 

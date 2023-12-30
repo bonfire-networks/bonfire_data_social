@@ -1,5 +1,5 @@
 defmodule Bonfire.Data.Social.Activity do
-  use Pointers.Mixin,
+  use Needle.Mixin,
     otp_app: :bonfire_data_social,
     # table_id: "1TSASVBJECTVERB1NGAN0BJECT",
     source: "bonfire_data_social_activity"
@@ -7,7 +7,7 @@ defmodule Bonfire.Data.Social.Activity do
   alias Bonfire.Data.AccessControl.Verb
   alias Bonfire.Data.Social.Activity
   alias Ecto.Changeset
-  alias Pointers.Pointer
+  alias Needle.Pointer
   # use Bonfire.Common.Utils, only: [debug: 2]
 
   mixin_schema do
@@ -38,7 +38,7 @@ end
 defmodule Bonfire.Data.Social.Activity.Migration do
   @moduledoc false
   use Ecto.Migration
-  import Pointers.Migration
+  import Needle.Migration
   alias Bonfire.Data.Social.Activity
 
   @activity_table Activity.__schema__(:source)
@@ -47,24 +47,24 @@ defmodule Bonfire.Data.Social.Activity.Migration do
 
   defp make_activity_table(exprs) do
     quote do
-      require Pointers.Migration
+      require Needle.Migration
 
-      Pointers.Migration.create_mixin_table Bonfire.Data.Social.Activity do
+      Needle.Migration.create_mixin_table Bonfire.Data.Social.Activity do
         Ecto.Migration.add(
           :subject_id,
-          Pointers.Migration.strong_pointer(),
+          Needle.Migration.strong_pointer(),
           null: false
         )
 
         Ecto.Migration.add(
           :object_id,
-          Pointers.Migration.strong_pointer(),
+          Needle.Migration.strong_pointer(),
           null: true
         )
 
         Ecto.Migration.add(
           :verb_id,
-          Pointers.Migration.strong_pointer(Bonfire.Data.AccessControl.Verb),
+          Needle.Migration.strong_pointer(Bonfire.Data.AccessControl.Verb),
           null: false
         )
 

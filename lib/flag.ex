@@ -1,12 +1,12 @@
 defmodule Bonfire.Data.Social.Flag do
-  use Pointers.Virtual,
+  use Needle.Virtual,
     otp_app: :bonfire_data_social,
     table_id: "71AGSPAM0RVNACCEPTAB1E1TEM",
     source: "bonfire_data_social_flag"
 
   alias Bonfire.Data.Edges.Edge
   alias Bonfire.Data.Social.Flag
-  alias Pointers.Changesets
+  alias Needle.Changesets
 
   virtual_schema do
     has_one(:edge, Edge, foreign_key: :id)
@@ -18,7 +18,7 @@ end
 defmodule Bonfire.Data.Social.Flag.Migration do
   @moduledoc false
   import Ecto.Migration
-  import Pointers.Migration
+  import Needle.Migration
   import Bonfire.Data.Edges.Edge.Migration
   alias Bonfire.Data.Social.Flag
 
