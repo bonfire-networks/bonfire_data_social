@@ -11,8 +11,9 @@ defmodule Bonfire.Data.Social.Profile do
     field(:summary, :string)
     field(:website, :string)
     field(:location, :string)
-    belongs_to(:icon, Bonfire.Files.Media)
-    belongs_to(:image, Bonfire.Files.Media)
+    # NOTE: define the below using Flexto instead
+    # belongs_to(:icon, Bonfire.Files.Media)
+    # belongs_to(:image, Bonfire.Files.Media)
   end
 
   @cast [:name, :summary, :website, :location, :icon_id, :image_id]
