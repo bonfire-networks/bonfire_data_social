@@ -13,14 +13,17 @@ defmodule Bonfire.Data.Social.Replied do
   alias Needle.Pointer
 
   mixin_schema do
+    # what object or activity are we replying to
     belongs_to(:reply_to, Pointer)
-    belongs_to(:thread, Pointer)
-    # Kept updated by triggers. Total replies = direct replies + nested replies.
 
+    # what discussion thread we're in, if any
+    belongs_to(:thread, Pointer)
+
+    # Kept updated by triggers
     field(:direct_replies_count, :integer, default: 0)
     field(:nested_replies_count, :integer, default: 0)
 
-    # auto-generated from the two others
+    # auto-generated from the two others (direct replies + nested replies.)
     field(:total_replies_count, :integer)
 
     # default is important here

@@ -11,9 +11,14 @@ defmodule Bonfire.Data.Social.Activity do
   # use Bonfire.Common.Utils, only: [debug: 2]
 
   mixin_schema do
+    # the who (eg. a user)
     belongs_to(:subject, Pointer)
-    belongs_to(:object, Pointer)
+
+    # what kind of action (eg. Like, Follow, ...)
     belongs_to(:verb, Verb)
+
+    # the what (eg. a specific post)
+    belongs_to(:object, Pointer)
   end
 
   @cast [:subject_id, :object_id, :verb_id]
