@@ -27,7 +27,7 @@ defmodule Bonfire.Data.Social.Replied do
     field(:total_replies_count, :integer)
 
     # default is important here
-    field(:path, EctoMaterializedPath.ULIDs, default: [])
+    field(:path, EctoMaterializedPath.UIDs, default: [])
   end
 
   @cast [:reply_to_id, :thread_id]
