@@ -4,7 +4,7 @@ defmodule Bonfire.Data.Social.Emoji do
     table_id: "3EM0J1T0EXPRESS0VREM0T10NS",
     source: "bonfire_data_social_emoji"
 
-  alias Bonfire.Data.Edges.Edge
+  # alias Bonfire.Data.Edges.Edge
   alias Bonfire.Data.Social.Emoji
   alias Needle.Changesets
 

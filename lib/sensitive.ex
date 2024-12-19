@@ -5,7 +5,7 @@ defmodule Bonfire.Data.Social.Sensitive do
 
   alias Bonfire.Data.Social.Sensitive
   alias Ecto.Changeset
-  alias Needle.Pointer
+  # alias Needle.Pointer
 
   mixin_schema do
     field(:is_sensitive, :boolean)
