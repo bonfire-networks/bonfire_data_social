@@ -24,9 +24,10 @@ end
 
 defmodule Bonfire.Data.Social.Created.Migration do
   @moduledoc false
-  use Ecto.Migration
-  import Needle.Migration
+  use Needle.Migration.Indexable
   alias Bonfire.Data.Social.Created
+
+  @table Created.__schema__(:source)
 
   # create_created_table/{0, 1}
 
@@ -38,7 +39,13 @@ defmodule Bonfire.Data.Social.Created.Migration do
         add_pointer(:creator_id, :strong, Needle.Pointer)
         unquote_splicing(exprs)
       end
+
+      add_creator_index()
     end
+  end
+
+  def add_creator_index do
+    create_index_for_pointer(@table, :creator_id)
   end
 
   defmacro create_created_table(), do: make_created_table([])

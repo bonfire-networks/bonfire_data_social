@@ -28,8 +28,10 @@ end
 
 defmodule Bonfire.Data.Social.Profile.Migration do
   @moduledoc false
-  import Needle.Migration
+  use Needle.Migration.Indexable
   alias Bonfire.Data.Social.Profile
+
+  @table Profile.__schema__(:source)
 
   # create_profile_table/{0,1}
 
@@ -46,7 +48,14 @@ defmodule Bonfire.Data.Social.Profile.Migration do
         add_pointer(:image_id, :strong, Bonfire.Files.Media)
         unquote_splicing(exprs)
       end
+
+      add_profile_indexes()
     end
+  end
+
+  def add_profile_indexes do
+    create_index_for_pointer(@table, :icon_id)
+    create_index_for_pointer(@table, :image_id)
   end
 
   defmacro create_profile_table(), do: make_profile_table([])
