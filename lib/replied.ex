@@ -78,7 +78,7 @@ end
 defmodule Bonfire.Data.Social.Replied.Migration do
   @moduledoc false
   use Ecto.Migration
-  import Needle.Migration
+  use Needle.Migration.Indexable
   alias Bonfire.Data.Social.Replied
 
   @table Replied.__schema__(:source)
@@ -163,6 +163,7 @@ defmodule Bonfire.Data.Social.Replied.Migration do
       Needle.Migration.create_mixin_table unquote(@table) do
         add_pointer(:reply_to_id, :strong)
         add_pointer(:thread_id, :strong)
+
         Ecto.Migration.add(:path, {:array, :uuid}, default: [], null: false)
 
         Ecto.Migration.add(:direct_replies_count, :bigint,
@@ -177,7 +178,14 @@ defmodule Bonfire.Data.Social.Replied.Migration do
 
         unquote_splicing(exprs)
       end
+
+      Bonfire.Data.Social.Replied.Migration.add_replied_indexes()
     end
+  end
+
+  def add_replied_indexes do
+    create_index_for_pointer(@table, :reply_to_id)
+    create_index_for_pointer(@table, :thread_id)
   end
 
   def add_generated_total_column do
