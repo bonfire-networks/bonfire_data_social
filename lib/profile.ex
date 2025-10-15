@@ -35,15 +35,15 @@ defmodule Bonfire.Data.Social.Profile.Migration do
 
   defp make_profile_table(exprs) do
     quote do
-      require Needle.Migration
+      import Needle.Migration
 
       Needle.Migration.create_mixin_table Bonfire.Data.Social.Profile do
         Ecto.Migration.add(:name, :text)
         Ecto.Migration.add(:summary, :text)
         Ecto.Migration.add(:website, :text)
         Ecto.Migration.add(:location, :text)
-        Ecto.Migration.add(:icon_id, strong_pointer(Bonfire.Files.Media))
-        Ecto.Migration.add(:image_id, strong_pointer(Bonfire.Files.Media))
+        add_pointer(:icon_id, :strong, Bonfire.Files.Media)
+        add_pointer(:image_id, :strong, Bonfire.Files.Media)
         unquote_splicing(exprs)
       end
     end

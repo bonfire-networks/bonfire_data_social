@@ -158,11 +158,11 @@ defmodule Bonfire.Data.Social.Replied.Migration do
 
   defp make_replied_table(exprs) do
     quote do
-      require Needle.Migration
+      import Needle.Migration
 
       Needle.Migration.create_mixin_table unquote(@table) do
-        Ecto.Migration.add(:reply_to_id, Needle.Migration.strong_pointer())
-        Ecto.Migration.add(:thread_id, Needle.Migration.strong_pointer())
+        add_pointer(:reply_to_id, :strong)
+        add_pointer(:thread_id, :strong)
         Ecto.Migration.add(:path, {:array, :uuid}, default: [], null: false)
 
         Ecto.Migration.add(:direct_replies_count, :bigint,

@@ -32,10 +32,10 @@ defmodule Bonfire.Data.Social.Created.Migration do
 
   defp make_created_table(exprs) do
     quote do
-      require Needle.Migration
+      import Needle.Migration
 
       Needle.Migration.create_mixin_table Bonfire.Data.Social.Created do
-        Ecto.Migration.add(:creator_id, Needle.Migration.strong_pointer())
+        add_pointer(:creator_id, :strong, Needle.Pointer)
         unquote_splicing(exprs)
       end
     end

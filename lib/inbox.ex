@@ -35,7 +35,7 @@
 #       require Needle.Migration
 
 #       Needle.Migration.create_mixin_table Bonfire.Data.Social.Inbox do
-#         Ecto.Migration.add(:feed_id, Needle.Migration.strong_pointer())
+#         add_pointer(:feed_id, :strong, Needle.Pointer)
 #         unquote_splicing(exprs)
 #       end
 #     end

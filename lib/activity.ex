@@ -52,26 +52,12 @@ defmodule Bonfire.Data.Social.Activity.Migration do
 
   defp make_activity_table(exprs) do
     quote do
-      require Needle.Migration
+      import Needle.Migration
 
       Needle.Migration.create_mixin_table Bonfire.Data.Social.Activity do
-        Ecto.Migration.add(
-          :subject_id,
-          Needle.Migration.strong_pointer(),
-          null: false
-        )
-
-        Ecto.Migration.add(
-          :object_id,
-          Needle.Migration.strong_pointer(),
-          null: true
-        )
-
-        Ecto.Migration.add(
-          :verb_id,
-          Needle.Migration.strong_pointer(Bonfire.Data.AccessControl.Verb),
-          null: false
-        )
+        add_pointer(:subject_id, :strong, Needle.Pointer, null: false)
+        add_pointer(:object_id, :strong, Needle.Pointer, null: true)
+        add_pointer(:verb_id, :strong, Bonfire.Data.AccessControl.Verb, null: false)
 
         unquote_splicing(exprs)
       end

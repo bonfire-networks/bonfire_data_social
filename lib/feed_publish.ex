@@ -43,14 +43,10 @@ defmodule Bonfire.Data.Social.FeedPublish.Migration do
 
   defp make_feed_publish_table(exprs) do
     quote do
-      require Needle.Migration
+      import Needle.Migration
 
       Needle.Migration.create_mixin_table Bonfire.Data.Social.FeedPublish do
-        Ecto.Migration.add(
-          :feed_id,
-          Needle.Migration.strong_pointer(),
-          primary_key: true
-        )
+        add_pointer(:feed_id, :strong, Needle.Pointer, primary_key: true)
 
         unquote_splicing(exprs)
       end
