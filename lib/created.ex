@@ -40,7 +40,7 @@ defmodule Bonfire.Data.Social.Created.Migration do
         unquote_splicing(exprs)
       end
 
-      add_creator_index()
+      Bonfire.Data.Social.Created.Migration.add_creator_index()
     end
   end
 

@@ -49,7 +49,7 @@ defmodule Bonfire.Data.Social.Profile.Migration do
         unquote_splicing(exprs)
       end
 
-      add_profile_indexes()
+      Bonfire.Data.Social.Profile.Migration.add_profile_indexes()
     end
   end
 
