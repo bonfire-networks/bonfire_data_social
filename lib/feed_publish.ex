@@ -2,9 +2,7 @@ defmodule Bonfire.Data.Social.FeedPublish do
   @moduledoc """
   A multimixin for an activity/object appearing in a feed.
 
-  A quite interesting thing about this model is that `feed`
-  references `Pointer`, so it isn't only things of type `Feed` that it can
-  appear in, they are just an obvious choice.
+  A quite interesting thing about this model is that `feed` references `Pointer`, so it isn't only things of type `Feed` that it can appear in, they are just an obvious choice.
   """
 
   use Needle.Mixin,

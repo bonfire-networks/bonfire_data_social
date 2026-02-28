@@ -37,6 +37,10 @@ defmodule Bonfire.Data.Social.PostContent do
 
   defp translations_changeset(translations, params) do
     Bonfire.Common.Localise.known_locales()
+    |> Enum.filter(fn locale ->
+      key = to_string(locale)
+      Map.has_key?(params, locale) or Map.has_key?(params, key)
+    end)
     |> Enum.reduce(Changeset.cast(translations, params, []), fn locale, changeset ->
       Changeset.cast_embed(changeset, locale, with: &translations_fields_changeset/2)
     end)
